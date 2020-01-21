@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
         indicatorColor: AppColors.transparent,
         backgroundColor: AppColors.primary,
         pageViewCanScroll: false,
+        isShowAppBar: false,
       ),
     );
   }

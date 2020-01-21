@@ -33,6 +33,7 @@ class TabBarWidget extends StatefulWidget {
   final ValueChanged<int> onSinglePress;
 
   final bool pageViewCanScroll; //pageView是否响应用户手指而滑动
+  final bool isShowAppBar;
 
   TabBarWidget({
     Key key,
@@ -52,6 +53,7 @@ class TabBarWidget extends StatefulWidget {
     this.footerButtons,
     this.onPageChanged,
     this.pageViewCanScroll = true,
+    this.isShowAppBar = true,
   }) : super(key: key);
 
   @override
@@ -137,10 +139,10 @@ class _TabBarState extends State<TabBarWidget>
     ///底部tab bar
     return new Scaffold(
         drawer: widget.drawer,
-        appBar: new AppBar(
+        appBar: widget.isShowAppBar ? new AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           title: widget.title,
-        ),
+        ) : null,
         body: new PageView(
           controller: _pageController,
           children: widget.tabViews,
