@@ -26,13 +26,14 @@ class _HomePageChildFirstState extends State<HomePageChildFirst> {
             children: <Widget>[
               Expanded(
                   child: new Container(
+                    padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
                 color: AppColors.white,
                 child: Row(
                   children: <Widget>[
                     Icon(
                       Icons.search,
                       color: AppColors.secondary_text,
-                      size: 25,
+                      size: 20,
                     ),
                     Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
                     Text(
@@ -43,6 +44,9 @@ class _HomePageChildFirstState extends State<HomePageChildFirst> {
                   ],
                 ),
               )),
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              ),
               Column(
                 children: <Widget>[
                   Icon(
@@ -52,7 +56,7 @@ class _HomePageChildFirstState extends State<HomePageChildFirst> {
                   ),
                   Text(
                     "扫啊扫",
-                    style: TextStyle(color: AppColors.white, fontSize: 15),
+                    style: TextStyle(color: AppColors.white, fontSize: 12),
                   )
                 ],
               ),
@@ -68,7 +72,7 @@ class _HomePageChildFirstState extends State<HomePageChildFirst> {
                   ),
                   Text(
                     "消息",
-                    style: TextStyle(color: AppColors.white, fontSize: 15),
+                    style: TextStyle(color: AppColors.white, fontSize: 12),
                   )
                 ],
               )
