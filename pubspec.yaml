@@ -33,6 +33,12 @@ dependencies:
   android_intent: 0.3.0
   # json序列化处理
   json_annotation: ^3.0.0
+  # 轮播
+  carousel_slider: ^1.4.1
+  # 瀑布流 https://www.jianshu.com/p/4da555e7e4c3
+  flutter_staggered_grid_view: "^0.3.0"
+  # 扩展NestedScrollView https://github.com/fluttercandies/extended_nested_scroll_view
+  extended_nested_scroll_view: ^0.3.6
 
 dev_dependencies:
   flutter_test:

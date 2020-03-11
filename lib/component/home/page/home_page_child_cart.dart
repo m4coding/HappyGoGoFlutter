@@ -9,10 +9,13 @@ class HomePageChildCart extends StatefulWidget {
 
 }
 
-class _HomePageChildCartState extends State<HomePageChildCart> {
+class _HomePageChildCartState extends State<HomePageChildCart>  with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return new Container(child: Text("Cart"),);
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
 }
