@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:happy_go_go_flutter/base/widgets/custom_banner.dart';
+import 'package:happy_go_go_flutter/base/widgets/sliver/sliver_header_delegate.dart';
 import 'package:happy_go_go_flutter/base/widgets/status_bar_compat_widget.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
@@ -15,14 +16,31 @@ class HomePageChildFirst extends StatefulWidget {
 }
 
 class _HomePageChildFirstState extends State<HomePageChildFirst>
-    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   TabController tabController;
+  TabController _headerTabController;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
 
     this.tabController = TabController(length: 2, vsync: this);
+    this._headerTabController = TabController(length: 2, vsync: this)
+      ..addListener(() {
+        // 监听滑动/点选位置
+        if (_headerTabController.index.toDouble() ==
+            _headerTabController.animation.value) {
+          setState(() => _currentIndex = _headerTabController.index);
+        }
+      });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    tabController.dispose();
+    _headerTabController.dispose();
   }
 
   @override
@@ -37,238 +55,155 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
     return new StatusBarCompatWidget(
         child: new Container(
             child: Column(
-              children: <Widget>[
-                Container(
-                  color: AppColors.primary,
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: Row(
-                    //头部
-                    children: <Widget>[
-                      Expanded(
-                          child: new Container(
-                            padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                            color: AppColors.white,
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.search,
-                                  color: AppColors.secondary_text,
-                                  size: 20,
-                                ),
-                                Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
-                                Text(
-                                  "商品名",
-                                  style: TextStyle(
-                                      color: AppColors.secondary_text, fontSize: 15),
-                                ),
-                              ],
-                            ),
-                          )),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Icon(
-                            Icons.scanner,
-                            color: AppColors.white,
-                            size: 20,
-                          ),
-                          Text(
-                            "扫啊扫",
-                            style: TextStyle(color: AppColors.white, fontSize: 12),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Icon(
-                            Icons.message,
-                            color: AppColors.white,
-                            size: 20,
-                          ),
-                          Text(
-                            "消息",
-                            style: TextStyle(color: AppColors.white, fontSize: 12),
-                          )
-                        ],
-                      )
+      children: <Widget>[
+//        Container(
+//          color: AppColors.primary,
+//          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+//          child: Row(
+//            //头部
+//            children: <Widget>[
+//              Expanded(
+//                  child: new Container(
+//                padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+//                color: AppColors.white,
+//                child: Row(
+//                  children: <Widget>[
+//                    Icon(
+//                      Icons.search,
+//                      color: AppColors.secondary_text,
+//                      size: 20,
+//                    ),
+//                    Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
+//                    Text(
+//                      "商品名",
+//                      style: TextStyle(
+//                          color: AppColors.secondary_text, fontSize: 15),
+//                    ),
+//                  ],
+//                ),
+//              )),
+//              Padding(
+//                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+//              ),
+//              Column(
+//                children: <Widget>[
+//                  Icon(
+//                    Icons.scanner,
+//                    color: AppColors.white,
+//                    size: 20,
+//                  ),
+//                  Text(
+//                    "扫啊扫",
+//                    style: TextStyle(color: AppColors.white, fontSize: 12),
+//                  )
+//                ],
+//              ),
+//              Padding(
+//                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+//              ),
+//              Column(
+//                children: <Widget>[
+//                  Icon(
+//                    Icons.message,
+//                    color: AppColors.white,
+//                    size: 20,
+//                  ),
+//                  Text(
+//                    "消息",
+//                    style: TextStyle(color: AppColors.white, fontSize: 12),
+//                  )
+//                ],
+//              )
+//            ],
+//          ),
+//        ),
+        Expanded(
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: SliverCustomHeaderDelegate(
+                    collapsedHeight: 80,
+                    expandedHeight: 130,
+                    paddingTop: /*MediaQuery.of(context).padding.top*/ 0,
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: TabBar(
+                    isScrollable: false,
+                    labelColor: Colors.black,
+                    controller: this._headerTabController,
+                    tabs: <Widget>[
+                      Tab(text: '头部1'),
+                      Tab(text: '头部2'),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: NestedScrollView(
-                    headerSliverBuilder: (context, innerBoxIsScrolled) {
-                      return [
-//                        SliverList(
-//                          delegate: SliverChildListDelegate(
-//                            [
-//                              CustomBanner([1, 2, 3, 4, 5], 200, (index) {
-//                                return "https://timgsa.baidu.com/timg"
-//                                    "?image&quality=80&size=b9999_10000&sec=1583470082401&di=dd953"
-//                                    "713eb661c2ade9007376a33ff16&imgtype=0&src=http%3A%2F%2Fa3.att.hud"
-//                                    "ong.com%2F68%2F61%2F3000008397641270606"
-//                                    "14318218_950.jpg";
-//                              }, onItemClick: (index) {
-//                                print("index=$index, banner child click");
-//                              }),
-//                            ],
-//                          ),
-//                        ),
-                        SliverGrid(
-                          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 200.0,
-                            mainAxisSpacing: 10.0,
-                            crossAxisSpacing: 10.0,
-                            childAspectRatio: 4.0,
-                          ),
-                          delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                              return Container(
-                                alignment: Alignment.center,
-                                color: Colors.teal[100 * (index % 9)],
-                                child: Text('grid item $index'),
-                              );
-                            },
-                            childCount: 10,
-                          ),
-                        ),
-//                        SliverList(
-//                          delegate: SliverChildBuilderDelegate(
-//                                  (BuildContext context, int index) {
-//                                return Container(
-//                                  alignment: Alignment.center,
-//                                  color: Colors.lightBlue[100 * (index % 9)],
-//                                  child: Text('list item $index'),
-//                                );
-//                              }, childCount: 50),
-//                        ),
-//                        SliverToBoxAdapter(
-//                          child: Container(
-//                            height: 100.0,
-//                            child: ListView.builder(
-//                              scrollDirection: Axis.horizontal,
-//                              itemCount: 20,
-//                              itemBuilder: (context, index) {
-//                                return Container(
-//                                  width: 100.0,
-//                                  child: Card(
-//                                    child: Text('data'),
-//                                  ),
-//                                );
-//                              },
-//                            ),
-//                          ),
-//                        ),
-//                        SliverToBoxAdapter(
-//                          child: Container(
-//                            child: _getFistPage(),
-//                          ),
-//                        ),
-                      ];
-                    },
-                    body: Column(
-                      children: <Widget>[
-//                        TabBar(
-//                          isScrollable: false,
-//                          labelColor: Colors.black,
-//                          controller: this.tabController,
-//                          tabs: <Widget>[
-//                            Tab(text: '1'),
-//                            Tab(text: '2'),
-//                          ],
-//                        ),
-//                        Expanded(
-//                          child: _getFistPage(),
-//                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )));
+                _getHeader(),
+                _getStickyTab(),
+              ];
+            },
+            body: _getBody(),
+          ),
+        ),
+      ],
+    )));
   }
 
-  _getFistPage() {
-    return NestedScrollView(
-      headerSliverBuilder: (context, innerBoxIsScrolled) {
-        return [
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                CustomBanner([1, 2, 3, 4, 5], 200, (index) {
-                  return "https://timgsa.baidu.com/timg"
-                      "?image&quality=80&size=b9999_10000&sec=1583470082401&di=dd953"
-                      "713eb661c2ade9007376a33ff16&imgtype=0&src=http%3A%2F%2Fa3.att.hud"
-                      "ong.com%2F68%2F61%2F3000008397641270606"
-                      "14318218_950.jpg";
-                }, onItemClick: (index) {
-                  print("index=$index, banner child click");
-                }),
-              ],
-            ),
-          ),
-          SliverGrid(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200.0,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 4.0,
-            ),
-            delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                return Container(
-                  alignment: Alignment.center,
-                  color: Colors.teal[100 * (index % 9)],
-                  child: Text('grid item $index'),
-                );
-              },
-              childCount: 10,
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  return Container(
-                    alignment: Alignment.center,
-                    color: Colors.lightBlue[100 * (index % 9)],
-                    child: Text('list item $index'),
-                  );
-                }, childCount: 50),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 100.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 100.0,
-                    child: Card(
-                      child: Text('data'),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ];
-      },
-      body: Column(
-        children: <Widget>[
-          TabBar(
+  Widget _getHeader() {
+    if (_currentIndex == 0) {
+      return SliverGrid(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200.0,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: 4.0,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return Container(
+              alignment: Alignment.center,
+              color: Colors.teal[100 * (index % 9)],
+              child: Text('grid item $index'),
+            );
+          },
+          childCount: 10,
+        ),
+      );
+    } else {
+      return SliverToBoxAdapter(
+        child: Center(
+          child: Text("hahah"),
+        ),
+      );
+    }
+  }
+
+  Widget _getStickyTab() {
+    if (_currentIndex == 0) {
+      return SliverPersistentHeader(
+        pinned: true,
+        delegate: SliverStickyTabBarDelegate(
+          color: AppColors.white,
+          child: TabBar(
             isScrollable: false,
             labelColor: Colors.black,
             controller: this.tabController,
             tabs: <Widget>[
-              Tab(text: '1'),
-              Tab(text: '2'),
+              Tab(text: '底部1'),
+              Tab(text: '底部2'),
             ],
           ),
+        ),
+      );
+    }
+  }
+
+  Widget _getBody() {
+    if (_currentIndex == 0) {
+      return Column(
+        children: <Widget>[
           Expanded(
             child: TabBarView(
               controller: this.tabController,
@@ -285,7 +220,7 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
                         "14318218_950.jpg");
                   },
                   staggeredTileBuilder: (int index) =>
-                  new StaggeredTile.count(2, index == 0 ? 1.5 : 2),
+                      new StaggeredTile.count(2, index == 0 ? 1.5 : 2),
                   mainAxisSpacing: 8.0,
                   crossAxisSpacing: 8.0,
                 ),
@@ -302,35 +237,162 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
             ),
           ),
         ],
-      ),
-    );
+      );
+    } else {
+      return ListView.builder(
+        itemCount: 200,
+        itemExtent: 50,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Text('Title $index'),
+          );
+        },
+      );
+    }
   }
-
 }
 
-class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabBar child;
-  final Color color;
+class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final double collapsedHeight;
+  final double expandedHeight;
+  final double paddingTop;
+  double barMinWidth;
+  double barMaxWidth;
+//  GlobalKey maxGlobalKey = new GlobalKey();
+  double padding = 10;
 
-  StickyTabBarDelegate({@required this.child, this.color});
 
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return new Container(
-      child: child,
-      color: color,
-    );
-  }
-
-  @override
-  double get maxExtent => this.child.preferredSize.height;
+  SliverCustomHeaderDelegate({
+    this.collapsedHeight,
+    this.expandedHeight,
+    this.paddingTop,
+  });
 
   @override
-  double get minExtent => this.child.preferredSize.height;
+  double get minExtent => this.collapsedHeight + this.paddingTop;
+
+  @override
+  double get maxExtent => this.expandedHeight;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return true;
+  }
+
+  double makeSearchBarWidth(double shrinkOffset) { //收起来后shrinkOffset最大，展开后shrinkOffset最小
+    barMinWidth = 310;
+    double temp = shrinkOffset / (this.maxExtent);
+    double returnValue = barMinWidth + (barMaxWidth - barMinWidth) * (1 - temp);
+    print("makeSearchBarWidth barMinWidth=$barMinWidth, barMaxWidth=$barMaxWidth, shrinkOffset=$shrinkOffset, temp=$temp, returnValue=$returnValue");
+    return (barMaxWidth - returnValue);
+  }
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+
+    barMaxWidth = MediaQuery.of(context).size.width - padding * 2;
+
+    return Container(
+      height: this.maxExtent,
+      width: MediaQuery.of(context).size.width,
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          // 背景图
+          Container(color: AppColors.primary),
+          // 收起头部
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            child: Container(
+              child: SafeArea(
+                bottom: false,
+                child: Container(
+//                  color: AppColors.primary,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child:  Row(
+                    //头部
+                    children: <Widget>[
+                      Expanded(
+                          child: new Container(
+                            padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                            height: 35,
+                            color: AppColors.primary_text,
+                          )),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Icon(
+                            Icons.scanner,
+                            color: AppColors.white,
+                            size: 20,
+                          ),
+                          Text(
+                            "扫啊扫",
+                            style: TextStyle(
+                                color: AppColors.white, fontSize: 12),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Icon(
+                            Icons.message,
+                            color: AppColors.white,
+                            size: 20,
+                          ),
+                          Text(
+                            "消息",
+                            style: TextStyle(
+                                color: AppColors.white, fontSize: 12),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: makeSearchBarWidth(shrinkOffset),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(padding, 0, padding, padding),
+              child: Container(
+//                width: makeSearchBarWidth(shrinkOffset),
+                decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(30))),
+                padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.search,
+                      color: AppColors.secondary_text,
+                      size: 20,
+                    ),
+                    Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
+                    Text(
+                      "商品名",
+                      style: TextStyle(
+                          color: AppColors.secondary_text, fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

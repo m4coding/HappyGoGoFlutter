@@ -5,6 +5,7 @@ import 'package:happy_go_go_flutter/component/home/page/home_page_child_cart.dar
 import 'package:happy_go_go_flutter/component/home/page/home_page_child_category.dart';
 import 'package:happy_go_go_flutter/component/home/page/home_page_child_first.dart';
 import 'package:happy_go_go_flutter/component/home/page/home_page_child_person.dart';
+import 'package:happy_go_go_flutter/component/home/page/test_page.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///首页
@@ -76,7 +77,8 @@ class _HomePageState extends State<HomePage> {
         ],
         tabViews: <Widget>[
           new HomePageChildFirst(),
-          new HomePageChildCategory(),
+//          new HomePageChildCategory(),
+          new TestPage2(),
           new HomePageChildCart(),
           new HomePageChildPerson(),
         ],
