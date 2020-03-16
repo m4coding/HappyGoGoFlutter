@@ -56,67 +56,6 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
         child: new Container(
             child: Column(
       children: <Widget>[
-//        Container(
-//          color: AppColors.primary,
-//          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-//          child: Row(
-//            //头部
-//            children: <Widget>[
-//              Expanded(
-//                  child: new Container(
-//                padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-//                color: AppColors.white,
-//                child: Row(
-//                  children: <Widget>[
-//                    Icon(
-//                      Icons.search,
-//                      color: AppColors.secondary_text,
-//                      size: 20,
-//                    ),
-//                    Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
-//                    Text(
-//                      "商品名",
-//                      style: TextStyle(
-//                          color: AppColors.secondary_text, fontSize: 15),
-//                    ),
-//                  ],
-//                ),
-//              )),
-//              Padding(
-//                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-//              ),
-//              Column(
-//                children: <Widget>[
-//                  Icon(
-//                    Icons.scanner,
-//                    color: AppColors.white,
-//                    size: 20,
-//                  ),
-//                  Text(
-//                    "扫啊扫",
-//                    style: TextStyle(color: AppColors.white, fontSize: 12),
-//                  )
-//                ],
-//              ),
-//              Padding(
-//                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-//              ),
-//              Column(
-//                children: <Widget>[
-//                  Icon(
-//                    Icons.message,
-//                    color: AppColors.white,
-//                    size: 20,
-//                  ),
-//                  Text(
-//                    "消息",
-//                    style: TextStyle(color: AppColors.white, fontSize: 12),
-//                  )
-//                ],
-//              )
-//            ],
-//          ),
-//        ),
         Expanded(
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -124,8 +63,8 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
                 SliverPersistentHeader(
                   pinned: true,
                   delegate: SliverCustomHeaderDelegate(
-                    collapsedHeight: 80,
-                    expandedHeight: 130,
+                    collapsedHeight: 60,
+                    expandedHeight: 110,
                     paddingTop: /*MediaQuery.of(context).padding.top*/ 0,
                   ),
                 ),
@@ -258,7 +197,6 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double paddingTop;
   double barMinWidth;
   double barMaxWidth;
-//  GlobalKey maxGlobalKey = new GlobalKey();
   double padding = 10;
 
 
@@ -266,7 +204,9 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
     this.collapsedHeight,
     this.expandedHeight,
     this.paddingTop,
-  });
+  }) {
+    barMinWidth = 310;
+  }
 
   @override
   double get minExtent => this.collapsedHeight + this.paddingTop;
@@ -280,11 +220,25 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   double makeSearchBarWidth(double shrinkOffset) { //收起来后shrinkOffset最大，展开后shrinkOffset最小
-    barMinWidth = 310;
     double temp = shrinkOffset / (this.maxExtent);
+    temp = temp * 6; //使增值加大
     double returnValue = barMinWidth + (barMaxWidth - barMinWidth) * (1 - temp);
-    print("makeSearchBarWidth barMinWidth=$barMinWidth, barMaxWidth=$barMaxWidth, shrinkOffset=$shrinkOffset, temp=$temp, returnValue=$returnValue");
+    if (returnValue < barMinWidth) { //限定范围
+      returnValue = barMinWidth;
+    }
+//    print("makeSearchBarWidth barMinWidth=$barMinWidth, barMaxWidth=$barMaxWidth, shrinkOffset=$shrinkOffset, temp=$temp, returnValue=$returnValue");
     return (barMaxWidth - returnValue);
+  }
+
+  int makeTitleColor(double shrinkOffset) { //收起来后shrinkOffset最大，展开后shrinkOffset最小
+    double temp = shrinkOffset / (this.maxExtent);
+    temp = temp * 3; //使增值加大
+    int returnValue = (255 * (1 - temp)).toInt();
+    if (returnValue < 0) { //限定范围
+      returnValue = 0;
+    }
+//    print("makeTitleColor returnValue=$returnValue");
+    return returnValue;
   }
 
   @override
@@ -307,56 +261,66 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
             right: 0,
             top: 0,
             child: Container(
-              child: SafeArea(
-                bottom: false,
-                child: Container(
+              child: Container(
 //                  color: AppColors.primary,
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child:  Row(
-                    //头部
-                    children: <Widget>[
-                      Expanded(
-                          child: new Container(
-                            padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                            height: 35,
-                            color: AppColors.primary_text,
-                          )),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Icon(
-                            Icons.scanner,
-                            color: AppColors.white,
-                            size: 20,
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child:  Row(
+                  //头部
+                  children: <Widget>[
+                    Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  new Container(
+                                    padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                    height: 35,
+                                    child: Row(children: <Widget>[
+                                      Text("HappyGo", style: TextStyle(fontSize: 20, color: Color.fromARGB(makeTitleColor(shrinkOffset), 255, 255, 255)),),
+                                    ],),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          Text(
-                            "扫啊扫",
-                            style: TextStyle(
-                                color: AppColors.white, fontSize: 12),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Icon(
-                            Icons.message,
-                            color: AppColors.white,
-                            size: 20,
-                          ),
-                          Text(
-                            "消息",
-                            style: TextStyle(
-                                color: AppColors.white, fontSize: 12),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                        )),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Icon(
+                          Icons.scanner,
+                          color: AppColors.white,
+                          size: 20,
+                        ),
+                        Text(
+                          "扫啊扫",
+                          style: TextStyle(
+                              color: AppColors.white, fontSize: 12),
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Icon(
+                          Icons.message,
+                          color: AppColors.white,
+                          size: 20,
+                        ),
+                        Text(
+                          "消息",
+                          style: TextStyle(
+                              color: AppColors.white, fontSize: 12),
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),
@@ -368,7 +332,6 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
             child: Padding(
               padding: EdgeInsets.fromLTRB(padding, 0, padding, padding),
               child: Container(
-//                width: makeSearchBarWidth(shrinkOffset),
                 decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.all(Radius.circular(30))),
