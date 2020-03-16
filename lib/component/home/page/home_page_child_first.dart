@@ -1,3 +1,4 @@
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,29 +60,7 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
         Expanded(
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: SliverCustomHeaderDelegate(
-                    collapsedHeight: 60,
-                    expandedHeight: 110,
-                    paddingTop: /*MediaQuery.of(context).padding.top*/ 0,
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: TabBar(
-                    isScrollable: false,
-                    labelColor: Colors.black,
-                    controller: this._headerTabController,
-                    tabs: <Widget>[
-                      Tab(text: '头部1'),
-                      Tab(text: '头部2'),
-                    ],
-                  ),
-                ),
-                _getHeader(),
-                _getStickyTab(),
-              ];
+              return _getHeaderList();
             },
             body: _getBody(),
           ),
@@ -90,37 +69,37 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
     )));
   }
 
-  Widget _getHeader() {
+  List<Widget> _getHeaderList() {
+    List<Widget> list = [];
     if (_currentIndex == 0) {
-      return SliverGrid(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200.0,
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          childAspectRatio: 4.0,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            return Container(
-              alignment: Alignment.center,
-              color: Colors.teal[100 * (index % 9)],
-              child: Text('grid item $index'),
-            );
-          },
-          childCount: 10,
-        ),
-      );
+      list.add(_getTopBar(60, 110));
+      list.add(_getTopTab(false));
+      list.add(_getGridView());
+      list.add(_getStickyTab());
     } else {
-      return SliverToBoxAdapter(
-        child: Center(
-          child: Text("hahah"),
-        ),
-      );
+      list.add(_getTopBar(110, 110));
+      list.add(_getTopTab(true));
+      list.add(_getGridView());
     }
+
+    return list;
   }
 
-  Widget _getStickyTab() {
-    if (_currentIndex == 0) {
+  ///collapsedHeight 缩起的高度
+  ///expandedHeight 展开的高度
+  Widget _getTopBar(double collapsedHeight, double expandedHeight) {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: SliverCustomHeaderDelegate(
+        collapsedHeight: collapsedHeight,
+        expandedHeight: expandedHeight,
+        paddingTop: /*MediaQuery.of(context).padding.top*/ 0,
+      ),
+    );
+  }
+
+  Widget _getTopTab(bool pinned) {
+    if (pinned) {
       return SliverPersistentHeader(
         pinned: true,
         delegate: SliverStickyTabBarDelegate(
@@ -128,15 +107,67 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
           child: TabBar(
             isScrollable: false,
             labelColor: Colors.black,
-            controller: this.tabController,
+            controller: this._headerTabController,
             tabs: <Widget>[
-              Tab(text: '底部1'),
-              Tab(text: '底部2'),
+              Tab(text: '头部1'),
+              Tab(text: '头部2'),
             ],
           ),
         ),
       );
+    } else {
+      return SliverToBoxAdapter(
+        child: TabBar(
+          isScrollable: false,
+          labelColor: Colors.black,
+          controller: this._headerTabController,
+          tabs: <Widget>[
+            Tab(text: '头部1'),
+            Tab(text: '头部2'),
+          ],
+        ),
+      );
     }
+
+  }
+
+  Widget _getGridView() {
+    return SliverGrid(
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200.0,
+        mainAxisSpacing: 10.0,
+        crossAxisSpacing: 10.0,
+        childAspectRatio: 4.0,
+      ),
+      delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+          return Container(
+            alignment: Alignment.center,
+            color: Colors.teal[100 * (index % 9)],
+            child: Text('grid item $index'),
+          );
+        },
+        childCount: 10,
+      ),
+    );
+  }
+
+  Widget _getStickyTab() {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: SliverStickyTabBarDelegate(
+        color: AppColors.white,
+        child: TabBar(
+          isScrollable: false,
+          labelColor: Colors.black,
+          controller: this.tabController,
+          tabs: <Widget>[
+            Tab(text: '底部1'),
+            Tab(text: '底部2'),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _getBody() {
@@ -220,6 +251,10 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   double makeSearchBarWidth(double shrinkOffset) { //收起来后shrinkOffset最大，展开后shrinkOffset最小
+    if (this.minExtent >= this.maxExtent) { //不改变
+      return 0;
+    }
+
     double temp = shrinkOffset / (this.maxExtent);
     temp = temp * 6; //使增值加大
     double returnValue = barMinWidth + (barMaxWidth - barMinWidth) * (1 - temp);
@@ -231,6 +266,11 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   int makeTitleColor(double shrinkOffset) { //收起来后shrinkOffset最大，展开后shrinkOffset最小
+
+    if (this.minExtent >= this.maxExtent) { //不改变
+      return 255;
+    }
+
     double temp = shrinkOffset / (this.maxExtent);
     temp = temp * 3; //使增值加大
     int returnValue = (255 * (1 - temp)).toInt();
