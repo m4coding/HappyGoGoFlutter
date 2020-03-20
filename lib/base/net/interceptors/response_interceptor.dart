@@ -16,8 +16,16 @@ class ResponseInterceptors extends InterceptorsWrapper {
     try {
       if (response.statusCode == 200) {
         Map<String, dynamic> map = response.data;
-        value = new NetResultData(null, map["data"], map["code"],
-            map["message"], map["code"] == "40001");
+        if (map["data"] is Map) {
+          value = new NetResultData(null, map["data"], map["code"],
+              map["message"], map["code"] == "40001");
+        } else if (map["data"] is List) {
+          value = new NetResultData(map["data"], null, map["code"],
+              map["message"], map["code"] == "40001");
+        } else if (map["data"] == null) {
+          value = new NetResultData(null, null, map["code"],
+              map["message"], map["code"] == "40001");
+        }
       }
     } catch (e) {
       print("ResponseInterceptors error=" + e.toString() + option.path);
