@@ -1,10 +1,10 @@
-
-
 import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:happy_go_go_flutter/style/app_colors.dart';
+import 'package:intl/intl.dart';
 
 // The over-scroll distance that moves the indicator to its maximum
 // displacement, as a percentage of the scrollable's container extent.
@@ -105,7 +105,7 @@ class NestedScrollViewRefreshLayout extends StatefulWidget {
   final Widget child;
 
   /// The distance from the child's top or bottom edge to where the refresh
-  /// indicator will settle. During the drag that exposes the refresh indicator,
+  /// inicdator will settle. During the drag that exposes the refresh indicator,
   /// its actual displacement may significantly exceed this value.
   final double displacement;
 
@@ -137,6 +137,7 @@ class NestedScrollViewRefreshLayout extends StatefulWidget {
 
   /// {@macro flutter.material.progressIndicator.semanticsValue}
   final String semanticsValue;
+
   @override
   NestedScrollViewRefreshIndicatorState createState() =>
       NestedScrollViewRefreshIndicatorState();
@@ -199,6 +200,7 @@ class NestedScrollViewRefreshIndicatorState
   }
 
   double maxContainerExtent = 0.0;
+
   bool _handleScrollNotification(ScrollNotification notification) {
     if (!widget.notificationPredicate(notification)) return false;
     maxContainerExtent = math.max(
@@ -309,8 +311,19 @@ class NestedScrollViewRefreshIndicatorState
       newValue = math.max(newValue, 1.0 / _kDragSizeFactorLimit);
     _positionController.value =
         newValue.clamp(0.0, 1.0); // this triggers various rebuilds
-    if (_mode == _RefreshIndicatorMode.drag && _valueColor.value.alpha == 0xFF)
-      _mode = _RefreshIndicatorMode.armed;
+    print("_checkDragOffset _positionFactor.value=" +
+        _positionFactor.value.toString() +
+        " _mode=" +
+        _mode.toString());
+    if (_mode ==
+            _RefreshIndicatorMode.drag && /*_valueColor.value.alpha == 0xFF*/
+        _positionFactor.value >= _kDragSizeFactorLimit) {
+      setState(() {
+        // Show the indeterminate progress indicator.
+        _mode = _RefreshIndicatorMode.armed;
+      });
+//      _mode = _RefreshIndicatorMode.armed;
+    }
   }
 
   // Stop showing the refresh indicator.
@@ -410,6 +423,7 @@ class NestedScrollViewRefreshIndicatorState
   }
 
   final GlobalKey _key = GlobalKey();
+  DateTime _dateTimeNow = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -434,44 +448,104 @@ class NestedScrollViewRefreshIndicatorState
         _mode == _RefreshIndicatorMode.refresh ||
             _mode == _RefreshIndicatorMode.done;
 
+    String text = "";
+    if (_mode == _RefreshIndicatorMode.armed) {
+      text = "释放刷新";
+    } else if (_mode == _RefreshIndicatorMode.refresh ||
+        _mode == _RefreshIndicatorMode.snap) {
+      text = "正在刷新...";
+    } else if (_mode == _RefreshIndicatorMode.done) {
+      text = "刷新完成";
+      _dateTimeNow = DateTime.now();
+    } else if (_mode == _RefreshIndicatorMode.drag) {
+      text = "拉动刷新";
+    } else if (_mode == _RefreshIndicatorMode.canceled) {
+      text = "取消刷新";
+    }
+
+    final TextStyle ts = TextStyle(
+      color: AppColors.primary_text,
+    ).copyWith(fontSize: 15);
+
     return Stack(
       children: <Widget>[
-        child,
         Positioned(
-          top: _isIndicatorAtTop ? 0.0 : null,
-          bottom: !_isIndicatorAtTop ? 0.0 : null,
+          top: 0.0,
+          bottom: 0.0,
           left: 0.0,
           right: 0.0,
-          child: SizeTransition(
-            axisAlignment: _isIndicatorAtTop ? 1.0 : -1.0,
-            sizeFactor: _positionFactor, // this is what brings it down
-            child: Container(
-              padding: _isIndicatorAtTop
-                  ? EdgeInsets.only(top: widget.displacement)
-                  : EdgeInsets.only(bottom: widget.displacement),
-              alignment: _isIndicatorAtTop
-                  ? Alignment.topCenter
-                  : Alignment.bottomCenter,
-              child: ScaleTransition(
-                scale: _scaleFactor,
-                child: AnimatedBuilder(
-                  animation: _positionController,
-                  builder: (BuildContext context, Widget child) {
-                    return RefreshProgressIndicator(
-                      semanticsLabel: widget.semanticsLabel ?? MaterialLocalizations.of(context).refreshIndicatorSemanticLabel,
-                      semanticsValue: widget.semanticsValue,
-                      value: showIndeterminateIndicator ? null : _value.value,
-                      valueColor: _valueColor,
-                      backgroundColor: widget.backgroundColor,
-                    );
-                  },
-                ),
+          child: Column(
+            children: <Widget>[
+              SizeTransition(
+                //逐渐增大
+                axisAlignment: _isIndicatorAtTop ? 1.0 : -1.0,
+                sizeFactor: _positionFactor, // this is what brings it down
+                child: SizeTransition(
+                    //反向回收
+                    axisAlignment: _isIndicatorAtTop ? 1.0 : -1.0,
+                    sizeFactor: _scaleFactor, // this is what brings it down
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.centerRight,
+                              child: _refreshImage(),
+                              margin: EdgeInsets.only(right: 12.0),
+                            ),
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                text,
+                                style: ts,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                              ),
+                              Text(
+                                "更新于 " +
+                                    DateFormat("yyyy-MM-dd HH:mm").format(_dateTimeNow),
+                                style: ts.copyWith(fontSize: 14),
+                              )
+                            ],
+                          ),
+                          Expanded(
+                            child: Container(),
+                          ),
+                        ],
+                      ),
+                    )),
               ),
-            ),
+              child,
+            ],
           ),
         ),
       ],
     );
+  }
+
+  _refreshImage() {
+    if (_mode == _RefreshIndicatorMode.drag) {
+      return Icon(Icons.arrow_downward, color: AppColors.primary_text,);
+    } else if (_mode == _RefreshIndicatorMode.refresh) {
+      return Container(
+          height: 20,
+          width: 20,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.0,
+        valueColor: AlwaysStoppedAnimation(
+          AppColors.accent,
+        ),
+          ));
+    } else if (_mode == _RefreshIndicatorMode.done) {
+      return Icon(Icons.done, color: AppColors.primary_text,);
+    } else if (_mode == _RefreshIndicatorMode.armed) {
+      return Icon(Icons.arrow_upward, color: AppColors.primary_text,);
+    }
   }
 }
 
