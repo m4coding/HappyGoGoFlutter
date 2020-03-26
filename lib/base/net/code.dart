@@ -8,7 +8,7 @@ class Code {
   ///网络超时
   static const NETWORK_TIMEOUT = -2;
 
-  ///网络返回数据格式化一次
+  ///网络数据解析异常
   static const NETWORK_JSON_EXCEPTION = -3;
 
   static const SUCCESS = 40001;

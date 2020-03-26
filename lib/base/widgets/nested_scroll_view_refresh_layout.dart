@@ -24,7 +24,7 @@ const Duration _kIndicatorScaleDuration = Duration(milliseconds: 200);
 
 /// The signature for a function that's called when the user has dragged a
 /// [NestedScrollViewRefreshIndicator] far enough to demonstrate that they want the app to
-/// refresh. The returned [Future] must complete when the refresh operation is
+/// refresh.  returnedThe [Future] must complete when the refresh operation is
 /// finished.
 ///
 /// Used by [NestedScrollViewRefreshIndicator.onRefresh].
@@ -311,10 +311,10 @@ class NestedScrollViewRefreshIndicatorState
       newValue = math.max(newValue, 1.0 / _kDragSizeFactorLimit);
     _positionController.value =
         newValue.clamp(0.0, 1.0); // this triggers various rebuilds
-    print("_checkDragOffset _positionFactor.value=" +
-        _positionFactor.value.toString() +
-        " _mode=" +
-        _mode.toString());
+//    print("_checkDragOffset _positionFactor.value=" +
+//        _positionFactor.value.toString() +
+//        " _mode=" +
+//        _mode.toString());
     if (_mode ==
             _RefreshIndicatorMode.drag && /*_valueColor.value.alpha == 0xFF*/
         _positionFactor.value >= _kDragSizeFactorLimit) {

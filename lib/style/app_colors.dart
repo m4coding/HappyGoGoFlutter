@@ -31,4 +31,6 @@ class AppColors {
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color transparent = Color(0x00000000);
+  static const Color fff5f5f5 = Color(0xFFf5f5f5);
+  static const Color fff0f0f0 = Color(0xFFf0f0f0);
 }
