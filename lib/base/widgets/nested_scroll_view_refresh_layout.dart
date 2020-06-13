@@ -12,7 +12,7 @@ const double _kDragContainerExtentPercentage = 0.25;
 
 // How much the scroll's drag gesture can overshoot the RefreshIndicator's
 // displacement; max displacement = _kDragSizeFactorLimit * displacement.
-const double _kDragSizeFactorLimit = 1.5;
+const double _kDragSizeFactorLimit = 1.2;
 
 // When the scroll ends, the duration of the refresh indicator's animation
 // to the RefreshIndicator's displacement.
@@ -520,7 +520,7 @@ class NestedScrollViewRefreshIndicatorState
                       ),
                     )),
               ),
-              child,
+              Expanded(child: child),
             ],
           ),
         ),
