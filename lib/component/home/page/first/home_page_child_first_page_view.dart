@@ -27,16 +27,14 @@ class HomePageChildFirstStaggeredGridView extends StatefulWidget {
 }
 
 class _HomePageChildFirstStaggeredGridViewState
-    extends State<HomePageChildFirstStaggeredGridView> with
-    ListPageLoad<ProductBean>, AutomaticKeepAliveClientMixin {
-
+    extends State<HomePageChildFirstStaggeredGridView>
+    with ListPageLoad<ProductBean>, AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
 
-    refreshController.footerMode.addListener((){
-      setState(() {
-      });
+    refreshController.footerMode.addListener(() {
+      setState(() {});
     });
 
     load();
@@ -59,8 +57,10 @@ class _HomePageChildFirstStaggeredGridViewState
           double progress = notification.metrics.pixels /
               notification.metrics.maxScrollExtent;
           //快到底部、不在加载状态、不在加载更多错误状态才去加载数据
-          if (progress > 0.95 && !refreshController.isLoading &&
-              refreshController.footerMode.value != LoadStatus.failed) {
+          if (progress > 0.95 &&
+              !refreshController.isLoading &&
+              refreshController.footerMode.value != LoadStatus.failed &&
+              refreshController.footerMode.value != LoadStatus.noMore) {
 //            print("onLoadMore");
             refreshController.footerMode?.value = LoadStatus.loading;
             onLoadMore();
@@ -80,11 +80,12 @@ class _HomePageChildFirstStaggeredGridViewState
                   itemCount: dataList.length,
                   itemBuilder: (BuildContext context, int index) {
                     ProductChildBean productChildBean =
-                    dataList[index].body.items[0];
+                        dataList[index].body.items[0];
                     return Container(
                         decoration: BoxDecoration(
                             color: AppColors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(15))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
                         child: Column(
                           children: <Widget>[
                             Container(
@@ -146,9 +147,9 @@ class _HomePageChildFirstStaggeredGridViewState
       body = CupertinoActivityIndicator();
     } else if (mode == LoadStatus.failed) {
       body = GestureDetector(
-        onTap: () {
-          onLoadMore(); //错误时，点击会再去加载数据
-        },
+          onTap: () {
+            onLoadMore(); //错误时，点击会再去加载数据
+          },
           child: Text("加载失败，点击重试"));
     } else {
       body = Text("没有更多数据了");
@@ -166,9 +167,10 @@ class _HomePageChildFirstStaggeredGridViewState
     requestParams["pageSize"] = pageSize;
     requestParams["pageNum"] = page;
     requestParams["tabType"] = widget.type;
-    return HttpManager().post(HttpAddress.urlGetPageListInfo, requestParams, (json) {
+    return HttpManager().post(HttpAddress.urlGetPageListInfo, requestParams,
+        (json) {
       return ProductPageBean.fromJson(json);
-    }).then((value){
+    }).then((value) {
       if (value.isSuccess) {
         return List<ProductBean>.from(value.data.list);
       } else {
@@ -176,7 +178,6 @@ class _HomePageChildFirstStaggeredGridViewState
       }
     });
   }
-
 
   //获取加载Layout的状态值
   LoadLayoutState _getLoadStateLayoutState() {
