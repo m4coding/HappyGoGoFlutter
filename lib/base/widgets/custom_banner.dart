@@ -60,6 +60,7 @@ class _BannerState<T> extends State<CustomBanner> {
             ),);
           },
         ).toList(),
+        autoPlayInterval: const Duration(seconds: 6),
         autoPlay: true,
         viewportFraction: 1.0,
         onPageChanged: (index) {

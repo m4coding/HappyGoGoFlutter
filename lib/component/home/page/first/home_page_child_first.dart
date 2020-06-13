@@ -1,7 +1,5 @@
 import 'dart:collection';
 
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
-    as ens;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,7 +13,6 @@ import 'package:happy_go_go_flutter/base/widgets/status_bar_compat_widget.dart';
 import 'package:happy_go_go_flutter/component/home/bean/home_item.dart';
 import 'package:happy_go_go_flutter/component/home/page/first/home_page_child_first_page_view.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
-import 'package:loading_more_list/loading_more_list.dart';
 
 ///首页子tab-首页tab
 class HomePageChildFirst extends StatefulWidget {
@@ -28,22 +25,14 @@ class HomePageChildFirst extends StatefulWidget {
 class _HomePageChildFirstState extends State<HomePageChildFirst>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   TabController _bottomTabController;
-  TabController _headerTabController;
-  int _currentIndex = 0;
   HomeTopContentBean _homeTopContentBean = new HomeTopContentBean();
   BodyTabChannelBean _bodyTabChannelBean;
 
   @override
   void initState() {
     super.initState();
-    this._headerTabController = TabController(length: 2, vsync: this)
-      ..addListener(() {
-        // 监听滑动/点选位置
-        if (_headerTabController.index.toDouble() ==
-            _headerTabController.animation.value) {
-          setState(() => _currentIndex = _headerTabController.index);
-        }
-      });
+
+    _getNetData();
   }
 
   @override
@@ -52,11 +41,6 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
     if (_bottomTabController != null) {
       _bottomTabController.dispose();
       _bottomTabController = null;
-    }
-
-    if (_headerTabController != null) {
-      _headerTabController.dispose();
-      _headerTabController = null;
     }
   }
 
@@ -112,7 +96,7 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
             onRefresh: () {
               return _getNetData();
             },
-            child: ens.NestedScrollView(
+            child: NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return _getHeaderList();
               },
@@ -126,37 +110,31 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
 
   List<Widget> _getHeaderList() {
     List<Widget> list = [];
-    if (_currentIndex == 0) {
-      list.add(_getTopBar(60, 110));
-      list.add(_getTopTab(false));
-      if (_homeTopContentBean.sections != null) {
-        for (SectionBean sectionBean in _homeTopContentBean.sections) {
-          switch (sectionBean.viewType) {
-            case HomeTopContentBean.VIEW_TYPE_GALLERY:
-              if (sectionBean.body is BodyGalleryBean) {
-                BodyGalleryBean bodyGalleryBean = sectionBean.body;
-                if (bodyGalleryBean.items != null &&
-                    bodyGalleryBean.items.isNotEmpty) {
-                  list.add(_getBanner(bodyGalleryBean.items));
-                }
+
+    list.add(_getTopBar(60, 110));
+    if (_homeTopContentBean.sections != null) {
+      for (SectionBean sectionBean in _homeTopContentBean.sections) {
+        switch (sectionBean.viewType) {
+          case HomeTopContentBean.VIEW_TYPE_GALLERY:
+            if (sectionBean.body is BodyGalleryBean) {
+              BodyGalleryBean bodyGalleryBean = sectionBean.body;
+              if (bodyGalleryBean.items != null &&
+                  bodyGalleryBean.items.isNotEmpty) {
+                list.add(_getBanner(bodyGalleryBean.items));
               }
-              break;
-            case HomeTopContentBean.VIEW_TYPE_TAB_CHANNEL:
-              if (sectionBean.body is BodyTabChannelBean) {
-                BodyTabChannelBean bodyTabChannelBean = sectionBean.body;
-                if (bodyTabChannelBean.items != null &&
-                    bodyTabChannelBean.items.isNotEmpty) {
-                  list.add(_getTabChannel(bodyTabChannelBean.items));
-                }
+            }
+            break;
+          case HomeTopContentBean.VIEW_TYPE_TAB_CHANNEL:
+            if (sectionBean.body is BodyTabChannelBean) {
+              BodyTabChannelBean bodyTabChannelBean = sectionBean.body;
+              if (bodyTabChannelBean.items != null &&
+                  bodyTabChannelBean.items.isNotEmpty) {
+                list.add(_getTabChannel(bodyTabChannelBean.items));
               }
-              break;
-          }
+            }
+            break;
         }
       }
-    } else {
-      list.add(_getTopBar(110, 110));
-      list.add(_getTopTab(true));
-      list.add(_getGridView());
     }
 
     return list;
@@ -177,38 +155,6 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
         paddingTop: /*MediaQuery.of(context).padding.top*/ 0,
       ),
     );
-  }
-
-  Widget _getTopTab(bool pinned) {
-    if (pinned) {
-      return SliverPersistentHeader(
-        pinned: true,
-        delegate: SliverStickyTabBarDelegate(
-          color: AppColors.white,
-          child: TabBar(
-            isScrollable: false,
-            labelColor: Colors.black,
-            controller: this._headerTabController,
-            tabs: <Widget>[
-              Tab(text: '头部1'),
-              Tab(text: '头部2'),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return SliverToBoxAdapter(
-        child: TabBar(
-          isScrollable: false,
-          labelColor: Colors.black,
-          controller: this._headerTabController,
-          tabs: <Widget>[
-            Tab(text: '头部1'),
-            Tab(text: '头部2'),
-          ],
-        ),
-      );
-    }
   }
 
   Widget _getBanner(List<GalleryChildBean> items) {
@@ -238,64 +184,31 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
     );
   }
 
-  Widget _getGridView() {
-    return SliverGrid(
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200.0,
-        mainAxisSpacing: 10.0,
-        crossAxisSpacing: 10.0,
-        childAspectRatio: 4.0,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return Container(
-            alignment: Alignment.center,
-            color: Colors.teal[100 * (index % 9)],
-            child: Text('grid item $index'),
-          );
-        },
-        childCount: 10,
-      ),
-    );
-  }
-
   Widget _getBody() {
-    if (_currentIndex == 0) {
-      if (_bottomTabController == null || _bottomTabController.length == 0) {
-        return Column(
-          children: <Widget>[
+    if (_bottomTabController == null || _bottomTabController.length == 0) {
+      return Column(
+        children: <Widget>[
 //            Expanded(
 //
 //            ),
-          ],
-        );
-      }
-      List<Widget> list = [];
-      for (TabChannelChildBean tabChannelChildBean in _bodyTabChannelBean.items) {
-          list.add(HomePageChildFirstStaggeredGridView(tabChannelChildBean.type));
-      }
-
-      return Column(
-        children: <Widget>[
-          Expanded(
-            child: TabBarView(
-              controller: _bottomTabController,
-              children: list,
-            ),
-          ),
         ],
       );
-    } else {
-      return ListView.builder(
-        itemCount: 200,
-        itemExtent: 50,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Text('Title $index'),
-          );
-        },
-      );
     }
+    List<Widget> list = [];
+    for (TabChannelChildBean tabChannelChildBean in _bodyTabChannelBean.items) {
+      list.add(HomePageChildFirstStaggeredGridView(tabChannelChildBean.type));
+    }
+
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: TabBarView(
+            controller: _bottomTabController,
+            children: list,
+          ),
+        ),
+      ],
+    );
   }
 }
 
