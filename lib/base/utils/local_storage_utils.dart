@@ -1,6 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 ///SharedPreferences 本地存储
+///android 的存储路径为FlutterSharedPreference.xml
+///实际对应的key会在前面添加前缀flutter.
 class LocalStorageUtils {
 
   static save(String key, value) async {
