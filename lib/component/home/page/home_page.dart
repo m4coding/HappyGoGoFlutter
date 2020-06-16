@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:happy_go_go_flutter/base/widgets/tabbar_widget.dart';
+import 'package:happy_go_go_flutter/component/home/page/category/home_page_child_category.dart';
 import 'package:happy_go_go_flutter/component/home/page/home_page_child_cart.dart';
-import 'package:happy_go_go_flutter/component/home/page/home_page_child_category.dart';
 import 'package:happy_go_go_flutter/component/home/page/first/home_page_child_first.dart';
 import 'package:happy_go_go_flutter/component/home/page/home_page_child_person.dart';
-import 'package:happy_go_go_flutter/component/home/page/test_page.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///首页
@@ -22,7 +21,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new Container(
-//      color: AppColors.white,s
       child: new TabBarWidget(
         type: TabType.bottom,
         tabItems: <Widget>[
@@ -77,8 +75,7 @@ class _HomePageState extends State<HomePage> {
         ],
         tabViews: <Widget>[
           new HomePageChildFirst(),
-//          new HomePageChildCategory(),
-          new TestPage2(),
+          new HomePageChildCategory(),
           new HomePageChildCart(),
           new HomePageChildPerson(),
         ],

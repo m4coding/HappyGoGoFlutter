@@ -46,6 +46,8 @@ class _HomePageChildFirstState extends State<HomePageChildFirst>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    print("_HomePageChildFirstState");
     return _getBuild();
   }
 

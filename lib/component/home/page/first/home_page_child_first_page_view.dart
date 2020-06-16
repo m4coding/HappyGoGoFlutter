@@ -49,7 +49,7 @@ class _HomePageChildFirstStaggeredGridViewState
   Widget build(BuildContext context) {
     //列数 = crossAxisCount / StaggeredTile指定的占据几个单元格
     return LoadStateLayout(
-      state: _getLoadStateLayoutState(),
+      state: getLoadStateLayoutState(),
       errorRetry: load,
       successWidget: NotificationListener(
         onNotification: (ScrollNotification notification) {
@@ -171,21 +171,6 @@ class _HomePageChildFirstStaggeredGridViewState
         throw Exception(value.message);
       }
     });
-  }
-
-  //获取加载Layout的状态值
-  LoadLayoutState _getLoadStateLayoutState() {
-    if (loadType == LoadType.LOAD_TYPE_ERROR_LOAD) {
-      return LoadLayoutState.State_Error;
-    } else if (loadType == LoadType.LOAD_TYPE_START_LOAD) {
-      return LoadLayoutState.State_Loading;
-    } else {
-      if (dataList.isEmpty) {
-        return LoadLayoutState.State_Empty;
-      }
-    }
-
-    return LoadLayoutState.State_Success;
   }
 
   @override

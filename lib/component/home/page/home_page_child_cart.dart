@@ -12,7 +12,8 @@ class HomePageChildCart extends StatefulWidget {
 class _HomePageChildCartState extends State<HomePageChildCart>  with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
-    return new Container(child: Text("Cart"),);
+    super.build(context);
+    return new Container(child: Center(child: Text("Cart")),);
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:happy_go_go_flutter/base/utils/log_utils.dart';
+import 'package:happy_go_go_flutter/base/widgets/load_state_layout.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 ///@author mochangsheng
@@ -77,6 +78,20 @@ abstract class ListPageLoad<B> {
       loadType = LoadType.LOAD_TYPE_ERROR_LOAD;
       onErrorLoad(loadType);
     });
+  }
+
+  LoadLayoutState getLoadStateLayoutState() {
+    if (loadType == LoadType.LOAD_TYPE_ERROR_LOAD) {
+      return LoadLayoutState.State_Error;
+    } else if (loadType == LoadType.LOAD_TYPE_START_LOAD) {
+      return LoadLayoutState.State_Loading;
+    } else {
+      if (dataList.isEmpty) {
+        return LoadLayoutState.State_Empty;
+      }
+    }
+
+    return LoadLayoutState.State_Success;
   }
 
   /// 开始加载

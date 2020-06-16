@@ -9,13 +9,15 @@ class LoadStateLayout extends StatefulWidget {
   final Widget successWidget; //成功视图
   final VoidCallback errorRetry; //错误事件处理
   final VoidCallback emptyRetry; //空数据事件处理
+  final Color backgroundColor;
 
   LoadStateLayout(
       {Key key,
       this.state = LoadLayoutState.State_Loading, //默认为加载状态
       this.successWidget,
       this.errorRetry,
-      this.emptyRetry})
+      this.emptyRetry,
+      this.backgroundColor})
       : super(key: key);
 
   @override
@@ -59,7 +61,7 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
       width: double.infinity,
       height: double.infinity,
       alignment: Alignment.center,
-      color: Colors.white,
+      color: widget.backgroundColor ?? Colors.white,
       child: Container(
         width: 40,
         height: 40,
@@ -75,7 +77,7 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
     return Container(
         width: double.infinity,
         height: double.infinity,
-        color: Colors.white,
+        color: widget.backgroundColor ?? Colors.white,
         child: GestureDetector(
           onTap: widget.errorRetry,
           child: Column(
@@ -92,7 +94,7 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
 
   Widget get _emptyView {
     return Container(
-        color: Colors.white,
+        color: widget.backgroundColor ?? Colors.white,
         width: double.infinity,
         height: double.infinity,
         child: Column(

@@ -7,3 +7,7 @@
 ## 编译
 
 flutter build apk --target-platform android-arm,android-arm64
+
+## 生成bean
+
+flutter packages pub run build_runner build --delete-conflicting-outputs

@@ -12,7 +12,8 @@ class HomePageChildPerson extends StatefulWidget {
 class _HomePageChildPersonState extends State<HomePageChildPerson>  with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
-    return new Container(child: Text("Person"),);
+    super.build(context);
+    return new Container(child: Center(child: Text("Person")),);
   }
 
   @override

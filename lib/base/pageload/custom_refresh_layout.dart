@@ -8,9 +8,11 @@ class CustomRefreshLayout extends StatefulWidget {
   final Widget child;
   final VoidCallback onRefresh;
   final VoidCallback onLoading;
+  final bool enablePullDown; //是否使能下拉刷新
+  final bool enablePullUp; //是否使能上拉加载更多
 
   CustomRefreshLayout(
-      {@required this.controller, this.child, this.onRefresh, this.onLoading});
+      {@required this.controller, this.child, this.onRefresh, this.onLoading, this.enablePullUp, this.enablePullDown});
 
   @override
   State<StatefulWidget> createState() {
@@ -28,8 +30,8 @@ class _CustomRefreshLayoutState extends State<CustomRefreshLayout> {
   Widget build(BuildContext context) {
     return SmartRefresher(
       controller: widget.controller,
-      enablePullDown: true,
-      enablePullUp: true,
+      enablePullDown: widget.enablePullDown ?? true,
+      enablePullUp: widget.enablePullUp ?? true,
       child: widget.child,
       onLoading: widget.onLoading,
       onRefresh: widget.onRefresh,

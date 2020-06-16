@@ -3,8 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class PageBean{
-  int pageNum;
-  int pageSize;
-  int totalPage;
-  int total;
+  int pageNum; //页码
+  int pageSize; //每页个数
+  int totalPage; //总页数
+  int total; //总个数
 }
