@@ -718,8 +718,8 @@ class TabBar extends StatefulWidget implements PreferredSizeWidget {
   /// even if the tap doesn't change the TabController's index. TabBar [onTap]
   /// callbacks should not make changes to the TabController since that would
   /// interfere with the default tap handler.
-  final ValueChanged<int> onTap;
-  final ValueChanged<int> onDoubleTap;
+  final bool Function(int value) onTap;
+  final bool Function(int value) onDoubleTap;
 
   /// A size whose height depends on if the tabs have both icons and text.
   ///
@@ -953,18 +953,22 @@ class _TabBarState extends State<TabBar> {
 
   void _handleTap(int index) {
     assert(index >= 0 && index < widget.tabs.length);
-    _controller.animateTo(index);
     if (widget.onTap != null) {
-      widget.onTap(index);
+      if (widget.onTap(index) == true) { //true，触发抵消
+        return;
+      }
     }
+    _controller.animateTo(index);
   }
 
   void _handleDoubleTap(int index) {
     assert(index >= 0 && index < widget.tabs.length);
-    _controller.animateTo(index);
     if (widget.onDoubleTap != null) {
-      widget.onDoubleTap(index);
+      if (widget.onDoubleTap(index) == true) {
+        return;
+      }
     }
+    _controller.animateTo(index);
   }
 
   Widget _buildStyledTab(Widget child, bool selected, Animation<double> animation) {

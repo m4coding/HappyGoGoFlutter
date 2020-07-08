@@ -46,6 +46,10 @@ dependencies:
   # log 打印
   logger: 0.9.1
   cached_network_image: 2.0.0
+  # 获取设备信息
+  device_info: 0.4.1+5
+  # 获取app包信息
+  package_info: 0.4.0+16
 
 dev_dependencies:
   flutter_test:
@@ -100,3 +104,5 @@ flutter:
 
   assets:
     - assets/images/ic_launcher_web.png
+    - assets/images/login_ic_hide_password.png
+    - assets/images/login_ic_show_password.png

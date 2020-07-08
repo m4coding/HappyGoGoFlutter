@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:happy_go_go_flutter/base/utils/local_storage_utils.dart';
 
-import '../../config.dart';
+import '../../config/config.dart';
 
 /**
  * Token拦截器
@@ -37,7 +37,7 @@ class TokenInterceptors extends InterceptorsWrapper {
       if (response.request.path.contains("ysb-user/api/auth/appLogin")) { //判断是否是登录url
         if (response.statusCode == 200 && response.data["code"] == "40001") {
           _token = response.data["data"]["token"]; //取出token并保存
-          await LocalStorageUtils.save(Config.TOKEN_KEY, _token);
+          await LocalStorageUtils.save(AppConfig.KEY_TOKEN, _token);
         }
       }
     } catch (e) {
@@ -49,12 +49,12 @@ class TokenInterceptors extends InterceptorsWrapper {
   ///清除授权
   clearAuthorization() {
     this._token = null;
-    LocalStorageUtils.remove(Config.TOKEN_KEY);
+    LocalStorageUtils.remove(AppConfig.KEY_TOKEN);
   }
 
   ///获取授权token
   getAuthorization() async {
-    String token = await LocalStorageUtils.get(Config.TOKEN_KEY);
+    String token = await LocalStorageUtils.get(AppConfig.KEY_TOKEN);
     if (token == null) {
       //提示输入账号密码
     } else {

@@ -1,0 +1,204 @@
+import 'package:flutter/material.dart';
+import 'package:happy_go_go_flutter/style/app_colors.dart';
+
+///登录页
+class LoginPage extends StatefulWidget {
+  static const String sName = "LoginPage";
+
+  static void newInstance(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) {
+      return LoginPage();
+    }));
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    return new _LoginState();
+  }
+}
+
+class _LoginState extends State<LoginPage> {
+  TextEditingController _userController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
+  bool _isShowPassword = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              top: 20,
+              left: 20,
+              child: GestureDetector(
+                child: Icon(
+                  Icons.close,
+                  size: 28,
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+            Positioned(
+              top: 100,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Column(
+                  children: <Widget>[
+                    new Image(
+                      image:
+                          new AssetImage("assets/images/ic_launcher_web.png"),
+                      width: 150,
+                      height: 150,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: _userController,
+                            decoration: InputDecoration(
+                              hintText: "请输入您的账号",
+                              hintStyle: TextStyle(
+                                  fontSize: 15,
+                                  color: AppColors.secondary_text),
+                              border: InputBorder.none,
+                            ),
+                            style: TextStyle(
+                                fontSize: 15, color: AppColors.ff333333),
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                        _userController.text.toString().isNotEmpty
+                            ? GestureDetector(
+                                child: Icon(
+                                  Icons.cancel,
+                                  color: Color(0xffdbdbdb),
+                                  size: 20,
+                                ),
+                                onTap: () {
+                                  _userController.clear();
+                                  setState(() {});
+                                },
+                              )
+                            : Container(),
+                      ],
+                    ),
+                    Container(
+                      color: AppColors.divider,
+                      height: 1,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: TextField(
+                          obscureText: !_isShowPassword,
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            hintText: "请输入您的密码",
+                            hintStyle: TextStyle(
+                                fontSize: 15, color: AppColors.secondary_text),
+                            border: InputBorder.none,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.divider,
+                                width: 1, //边线宽度为2
+                              ),
+                            ),
+                          ),
+                          style: TextStyle(
+                              fontSize: 15, color: AppColors.ff333333),
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                        )),
+                        _passwordController.text.toString().isNotEmpty
+                            ? Container(
+                                margin: EdgeInsets.symmetric(horizontal: 10),
+                                child: GestureDetector(
+                                  child: Icon(
+                                    Icons.cancel,
+                                    color: Color(0xffdbdbdb),
+                                    size: 20,
+                                  ),
+                                  onTap: () {
+                                    _passwordController.clear();
+                                    setState(() {});
+                                  },
+                                ),
+                              )
+                            : Container(),
+                        GestureDetector(
+                          child: Image.asset(
+                            _isShowPassword
+                                ? "assets/images/login_ic_show_password.png"
+                                : "assets/images/login_ic_hide_password.png",
+                            width: 25,
+                            height: 25,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              _isShowPassword = !_isShowPassword;
+                            });
+                          },
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          color: AppColors.divider,
+                          width: 1,
+                          height: 20,
+                        ),
+                        Text(
+                          "忘记密码",
+                          style: TextStyle(
+                              color: AppColors.primary_text, fontSize: 15),
+                        )
+                      ],
+                    ),
+                    Container(
+                      color: AppColors.divider,
+                      height: 1,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 30),
+                    ),
+                    RaisedButton(
+                      child: Container(
+                        child: Center(
+                            child: Text(
+                          "登录",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        )),
+                        height: 55,
+                        width: double.infinity,
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100)),
+                      color: AppColors.primary,
+                      disabledColor: AppColors.primary_50,
+                      onPressed: _userController.text.isNotEmpty &&
+                              _passwordController.text.isNotEmpty
+                          ? () {
+                              //登录操作
+                            }
+                          : null,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

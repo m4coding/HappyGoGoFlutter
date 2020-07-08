@@ -30,10 +30,12 @@ class TabBarWidget extends StatefulWidget {
 
   final ValueChanged<int> onPageChanged;
   final ValueChanged<int> onDoublePress;
-  final ValueChanged<int> onSinglePress;
+  final bool Function(int value) onSinglePress;
 
   final bool pageViewCanScroll; //pageView是否响应用户手指而滑动
   final bool isShowAppBar;
+
+  final PageController pageController;
 
   TabBarWidget({
     Key key,
@@ -54,6 +56,7 @@ class TabBarWidget extends StatefulWidget {
     this.onPageChanged,
     this.pageViewCanScroll = true,
     this.isShowAppBar = true,
+    this.pageController,
   }) : super(key: key);
 
   @override
@@ -62,7 +65,6 @@ class TabBarWidget extends StatefulWidget {
 
 class _TabBarState extends State<TabBarWidget>
     with SingleTickerProviderStateMixin {
-  final PageController _pageController = PageController();
 
   TabController _tabController;
 
@@ -90,21 +92,31 @@ class _TabBarState extends State<TabBarWidget>
     widget.onPageChanged?.call(index);
   }
 
-  _navigationTapClick(index) {
+  bool _navigationTapClick(index) {
     if (_index == index) {
-      return;
+      return true;
     }
+
+    if (widget.onSinglePress?.call(index) == true) { //返回true表示已消费事件，不会往下处理
+      return true;
+    }
+
     _index = index;
     widget.onPageChanged?.call(index);
 
     ///不想要动画
-    _pageController.jumpTo(MediaQuery.of(context).size.width * index);
-    widget.onSinglePress?.call(index);
+    widget.pageController.jumpTo(MediaQuery.of(context).size.width * index);
+
+    return false;
   }
 
-  _navigationDoubleTapClick(index) {
-    _navigationTapClick(index);
-    widget.onDoublePress?.call(index);
+  bool _navigationDoubleTapClick(index) {
+    if (_navigationTapClick(index) == true) {
+      widget.onDoublePress?.call(index);
+      return true;
+    }
+
+    return false;
   }
 
   @override
@@ -128,7 +140,7 @@ class _TabBarState extends State<TabBarWidget>
               onTap: _navigationTapClick),
         ),
         body: new PageView(
-          controller: _pageController,
+          controller: widget.pageController,
           children: widget.tabViews,
           onPageChanged: _navigationPageChanged,
         ),
@@ -144,7 +156,7 @@ class _TabBarState extends State<TabBarWidget>
           title: widget.title,
         ) : null,
         body: new PageView(
-          controller: _pageController,
+          controller: widget.pageController,
           children: widget.tabViews,
           onPageChanged: _navigationPageChanged,
           physics: widget.pageViewCanScroll ? new PageScrollPhysics() : new NeverScrollableScrollPhysics(),

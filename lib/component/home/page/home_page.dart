@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:happy_go_go_flutter/base/widgets/tabbar_widget.dart';
+import 'package:happy_go_go_flutter/component/auth/auth_page_manager.dart';
+import 'package:happy_go_go_flutter/component/auth/manager/login_manager.dart';
+import 'package:happy_go_go_flutter/component/auth/page/login_page.dart';
 import 'package:happy_go_go_flutter/component/home/page/category/home_page_child_category.dart';
-import 'package:happy_go_go_flutter/component/home/page/home_page_child_cart.dart';
+import 'file:///E:/work/GoServer/happy_go_go_flutter/lib/component/cart/page/home_page_child_cart.dart';
 import 'package:happy_go_go_flutter/component/home/page/first/home_page_child_first.dart';
 import 'package:happy_go_go_flutter/component/home/page/home_page_child_person.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
@@ -18,6 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -83,6 +87,17 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: AppColors.primary,
         pageViewCanScroll: false,
         isShowAppBar: false,
+        pageController: new PageController(),
+        onSinglePress: (index) {
+          if (index == 2 || index == 3) { //购物车tab、我的tab需要登录状态下才能进入
+            if (!LoginManager.getInstance().isLogin()) {
+                AuthPageManager.goToLoginPage(context);
+                return true;
+            }
+          }
+
+          return false;
+        },
       ),
     );
   }
