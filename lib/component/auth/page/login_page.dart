@@ -1,5 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:happy_go_go_flutter/base/event/event_bus.dart';
+import 'package:happy_go_go_flutter/base/utils/log_utils.dart';
+import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
 import 'package:happy_go_go_flutter/component/auth/auth_page_manager.dart';
+import 'package:happy_go_go_flutter/component/auth/bean/login_bean.dart';
+import 'package:happy_go_go_flutter/component/auth/event/login_event.dart';
+import 'package:happy_go_go_flutter/component/auth/event/register_event.dart';
+import 'package:happy_go_go_flutter/component/auth/manager/login_manager.dart';
+import 'package:happy_go_go_flutter/component/auth/net/auth_net_utils.dart';
 import 'package:happy_go_go_flutter/generated/l10n.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
@@ -23,6 +33,31 @@ class _LoginState extends State<LoginPage> {
   TextEditingController _userController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   bool _isShowPassword = false;
+
+  StreamSubscription _eventSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _eventSubscription = eventBus.on<RegisterEvent>().listen((event) {
+      if (event.type == RegisterEvent.TYPE_REGISTER_SUCCESS) {
+        setState(() {
+          _userController.text = event.username;
+          _passwordController.text = event.password;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    if (_eventSubscription != null) {
+      _eventSubscription.cancel();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,6 +234,7 @@ class _LoginState extends State<LoginPage> {
                               _passwordController.text.isNotEmpty
                           ? () {
                               //登录操作
+                              _login();
                             }
                           : null,
                     ),
@@ -210,5 +246,16 @@ class _LoginState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _login() {
+    LoginParam loginParam = new LoginParam();
+    loginParam.userName = _userController.text;
+    loginParam.password = _passwordController.text;
+    LoginManager.getInstance().login(loginParam).then((value) {
+      if (value != null) {
+          Navigator.of(context).pop();
+      }
+    });
   }
 }

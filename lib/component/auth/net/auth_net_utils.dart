@@ -3,6 +3,7 @@ import 'dart:collection';
 
 import 'package:happy_go_go_flutter/base/net/api.dart';
 import 'package:happy_go_go_flutter/base/net/http_address.dart';
+import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
 import 'package:happy_go_go_flutter/component/auth/bean/login_bean.dart';
 import 'package:happy_go_go_flutter/component/auth/bean/register_bean.dart';
 

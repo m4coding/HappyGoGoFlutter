@@ -113,16 +113,6 @@ class HttpManager {
       return NetResultProcessData(null, null, netResultData.code, netResultData.message, netResultData.isSuccess);
     });
   }
-
-  ///清除授权
-  clearAuthorization() {
-    _tokenInterceptors.clearAuthorization();
-  }
-
-  ///获取授权token
-  getAuthorization() async {
-    return _tokenInterceptors.getAuthorization();
-  }
 }
 
 final HttpManager httpManager = new HttpManager();

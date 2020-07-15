@@ -8,7 +8,6 @@ import 'device_and_app_info_manager.dart';
 class AppConfig {
   static bool DEBUG = !kReleaseMode; //是否为debug模式下
   static const String KEY_TOKEN = "token";
-  static const String KEY_USER_ID = "userId";
 
   //域名
   static String DOMAIN;
@@ -19,12 +18,11 @@ class AppConfig {
     DOMAIN = "http://www.m4coding.xyz/happygo/fg";
 
     String token = await LocalStorageUtils.get(KEY_TOKEN);
-    int userId = await LocalStorageUtils.get(KEY_USER_ID);
     bool isLogin = false;
     if (token != null && token.isNotEmpty) {
       isLogin = true;
     }
-    LoginManager.getInstance().init(isLogin, token, userId);
+    LoginManager.getInstance().init(isLogin, token);
     await DeviceAndAppInfoManager.init();
   }
 }

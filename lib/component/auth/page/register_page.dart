@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:happy_go_go_flutter/base/event/event_bus.dart';
+import 'package:happy_go_go_flutter/base/utils/log_utils.dart';
+import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
 import 'package:happy_go_go_flutter/base/widgets/bar/common_bar.dart';
+import 'package:happy_go_go_flutter/component/auth/bean/register_bean.dart';
+import 'package:happy_go_go_flutter/component/auth/event/login_event.dart';
+import 'package:happy_go_go_flutter/component/auth/event/register_event.dart';
+import 'package:happy_go_go_flutter/component/auth/net/auth_net_utils.dart';
 import 'package:happy_go_go_flutter/generated/l10n.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
@@ -182,5 +189,24 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   //注册
-  void _register() {}
+  void _register() {
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      ToastUtils.show("确认的密码不一致");
+      return;
+    }
+
+    RegisterParam registerParam = new RegisterParam();
+    registerParam.identityType = "admin";
+    registerParam.certificate = _passwordController.text; //密码
+    registerParam.identity = _userController.text; //账号
+    AuthNetUtils.register(registerParam).then((value) {
+      ToastUtils.show("注册成功");
+      //发送注册成功事件
+      eventBus.fire(RegisterEvent(RegisterEvent.TYPE_REGISTER_SUCCESS, username: registerParam.identity, password: registerParam.certificate));
+      Navigator.pop(context);
+    }).catchError((onError){
+      ToastUtils.show(onError.toString());
+    });
+  }
 }

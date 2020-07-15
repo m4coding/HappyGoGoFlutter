@@ -1,17 +1,19 @@
 
 
 import 'package:happy_go_go_flutter/base/config/config.dart';
+import 'package:happy_go_go_flutter/base/event/event_bus.dart';
 import 'package:happy_go_go_flutter/base/utils/local_storage_utils.dart';
+import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
+import 'package:happy_go_go_flutter/component/auth/bean/login_bean.dart';
+import 'package:happy_go_go_flutter/component/auth/event/login_event.dart';
+import 'package:happy_go_go_flutter/component/auth/net/auth_net_utils.dart';
 
 ///登录管理器
 class LoginManager {
 
   static LoginManager _instance;
   bool _isLogin = false;
-  int _userId;
-  String _userName;
   String _token;
-  String _userHeadUrl;
 
   LoginManager.private();
 
@@ -24,26 +26,17 @@ class LoginManager {
   }
 
   ///初始化值，每次登录成功后都需要初始化
-  void init(isLogin, token, userId, {userName, userHeadUrl}) {
+  void init(isLogin, token, {userName, userHeadUrl}) {
     _isLogin = isLogin;
     _token = token;
-    _userId = userId;
-    _userName = userName;
-    _userHeadUrl = userHeadUrl;
   }
 
-  ///清理数据
-  void clear() {
+  //清理数据
+  void _clear() {
     _isLogin = false;
-    _userId = null;
-    _userName = null;
+    LocalStorageUtils.remove(AppConfig.KEY_TOKEN);
   }
 
-  ///清除本地数据
-  void clearLocal() {
-    LocalStorageUtils.remove(AppConfig.KEY_TOKEN);
-    LocalStorageUtils.remove(AppConfig.KEY_USER_ID);
-  }
 
   bool isLogin() {
     return _isLogin;
@@ -53,26 +46,23 @@ class LoginManager {
     return _token;
   }
 
-  int getUserId() {
-    return _userId;
-  }
-
-  String getUsername() {
-    return _userName;
-  }
-
-  String getUserHeadUrl() {
-    return _userHeadUrl;
-  }
-
-  void setUserHeadUrl(String headUrl) {
-    this._userHeadUrl = headUrl;
-  }
-
   ///退出登录
   void logout() {
-    clear();
-    clearLocal();
+    _clear();
+  }
+
+  ///登录
+  Future<LoginBean> login(LoginParam loginParam) {
+    return AuthNetUtils.login(loginParam).then((value) {
+      //保存token到本地
+      LocalStorageUtils.save(AppConfig.KEY_TOKEN, value.token);
+      init(true, value.token);
+      eventBus.fire(LoginEvent(LoginEvent.TYPE_LOGIN_SUCCESS));
+      ToastUtils.show("登录成功");
+      return value;
+    }).catchError((onError){
+      ToastUtils.show(onError.toString());
+    });
   }
 
 }

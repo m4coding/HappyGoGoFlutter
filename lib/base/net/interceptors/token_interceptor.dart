@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:happy_go_go_flutter/base/utils/local_storage_utils.dart';
+import 'package:happy_go_go_flutter/component/auth/manager/login_manager.dart';
 
 import '../../config/config.dart';
 
-/**
- * Token拦截器
- */
+/// Token拦截器
 class TokenInterceptors extends InterceptorsWrapper {
   String _token;
 
@@ -15,10 +14,7 @@ class TokenInterceptors extends InterceptorsWrapper {
   onRequest(RequestOptions options) async {
     //授权码
     if (_token == null) {
-      var authorizationCode = await getAuthorization();
-      if (authorizationCode != null) {
-        _token = authorizationCode;
-      }
+       _token = _getAuthorization();
     }
 
 
@@ -33,34 +29,12 @@ class TokenInterceptors extends InterceptorsWrapper {
 
   @override
   onResponse(Response response) async {
-    try {
-      if (response.request.path.contains("ysb-user/api/auth/appLogin")) { //判断是否是登录url
-        if (response.statusCode == 200 && response.data["code"] == "40001") {
-          _token = response.data["data"]["token"]; //取出token并保存
-          await LocalStorageUtils.save(AppConfig.KEY_TOKEN, _token);
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
     return response;
   }
 
-  ///清除授权
-  clearAuthorization() {
-    this._token = null;
-    LocalStorageUtils.remove(AppConfig.KEY_TOKEN);
-  }
-
   ///获取授权token
-  getAuthorization() async {
-    String token = await LocalStorageUtils.get(AppConfig.KEY_TOKEN);
-    if (token == null) {
-      //提示输入账号密码
-    } else {
-      this._token = token;
-    }
-
+  _getAuthorization() {
+    String token = LoginManager.getInstance().getToken();
     return token;
   }
 }
