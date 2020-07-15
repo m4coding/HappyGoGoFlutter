@@ -1,0 +1,14 @@
+{
+  "home_page": "Home",
+  "category": "Category",
+  "shopping_cart": "Cart",
+  "mine": "Mine",
+  "register_user": "RegisterUser",
+  "please_input_username": "Please Input Username",
+  "please_input_password": "Please Input Password",
+  "please_again_confirm_password": "Please Again Confirm Password",
+  "register": "Register",
+  "forget_password": "Forget Password",
+  "new_user_register": "New User Register",
+  "login": "Login"
+}

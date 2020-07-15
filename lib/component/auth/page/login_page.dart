@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:happy_go_go_flutter/component/auth/auth_page_manager.dart';
+import 'package:happy_go_go_flutter/generated/l10n.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///登录页
@@ -62,7 +64,7 @@ class _LoginState extends State<LoginPage> {
                           child: TextField(
                             controller: _userController,
                             decoration: InputDecoration(
-                              hintText: "请输入您的账号",
+                              hintText: S.of(context).please_input_username,
                               hintStyle: TextStyle(
                                   fontSize: 15,
                                   color: AppColors.secondary_text),
@@ -104,16 +106,10 @@ class _LoginState extends State<LoginPage> {
                           obscureText: !_isShowPassword,
                           controller: _passwordController,
                           decoration: InputDecoration(
-                            hintText: "请输入您的密码",
+                            hintText: S.of(context).please_input_password,
                             hintStyle: TextStyle(
                                 fontSize: 15, color: AppColors.secondary_text),
                             border: InputBorder.none,
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColors.divider,
-                                width: 1, //边线宽度为2
-                              ),
-                            ),
                           ),
                           style: TextStyle(
                               fontSize: 15, color: AppColors.ff333333),
@@ -158,7 +154,7 @@ class _LoginState extends State<LoginPage> {
                           height: 20,
                         ),
                         Text(
-                          "忘记密码",
+                          S.of(context).forget_password,
                           style: TextStyle(
                               color: AppColors.primary_text, fontSize: 15),
                         )
@@ -168,6 +164,20 @@ class _LoginState extends State<LoginPage> {
                       color: AppColors.divider,
                       height: 1,
                     ),
+                    Container(
+                      margin: EdgeInsets.only(top: 15),
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        child: Text(
+                          S.of(context).new_user_register,
+                          style: TextStyle(
+                              color: AppColors.primary_text, fontSize: 15),
+                        ),
+                        onTap: () {
+                          AuthPageManager.goToRegisterPage(context);
+                        },
+                      ),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(top: 30),
                     ),
@@ -175,7 +185,7 @@ class _LoginState extends State<LoginPage> {
                       child: Container(
                         child: Center(
                             child: Text(
-                          "登录",
+                              S.of(context).login,
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         )),
                         height: 55,

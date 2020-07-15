@@ -6,6 +6,7 @@ import 'package:happy_go_go_flutter/component/cart/page/home_page_child_cart.dar
 import 'package:happy_go_go_flutter/component/home/page/category/home_page_child_category.dart';
 import 'package:happy_go_go_flutter/component/home/page/first/home_page_child_first.dart';
 import 'package:happy_go_go_flutter/component/home/page/home_page_child_person.dart';
+import 'package:happy_go_go_flutter/generated/l10n.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///首页
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.home,
                   size: 20,
                 ),
-                new Text("首页")
+                new Text(S.of(context).home_page)
               ],
             ),
           ),
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.category,
                   size: 20,
                 ),
-                new Text("分类")
+                new Text(S.of(context).category)
               ],
             ),
           ),
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.shopping_cart,
                   size: 20,
                 ),
-                new Text("购物车")
+                new Text(S.of(context).shopping_cart)
               ],
             ),
           ),
@@ -70,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.person,
                   size: 20,
                 ),
-                new Text("我的")
+                new Text(S.of(context).mine)
               ],
             ),
           )
