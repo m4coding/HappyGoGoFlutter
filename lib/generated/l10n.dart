@@ -152,6 +152,146 @@ class S {
       args: [],
     );
   }
+
+  /// `AddCart`
+  String get add_to_cart {
+    return Intl.message(
+      'AddCart',
+      name: 'add_to_cart',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cart`
+  String get cart {
+    return Intl.message(
+      'Cart',
+      name: 'cart',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact`
+  String get contact {
+    return Intl.message(
+      'Contact',
+      name: 'contact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buy`
+  String get go_to_bug {
+    return Intl.message(
+      'Buy',
+      name: 'go_to_bug',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommend For You`
+  String get recommend_for_you {
+    return Intl.message(
+      'Recommend For You',
+      name: 'recommend_for_you',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not More`
+  String get more_load_end {
+    return Intl.message(
+      'Not More',
+      name: 'more_load_end',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Load Fail, Click Retry`
+  String get more_load_error {
+    return Intl.message(
+      'Load Fail, Click Retry',
+      name: 'more_load_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Release Refresh`
+  String get release_the_refresh {
+    return Intl.message(
+      'Release Refresh',
+      name: 'release_the_refresh',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refreshing`
+  String get is_pull_refreshing {
+    return Intl.message(
+      'Refreshing',
+      name: 'is_pull_refreshing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refresh End`
+  String get fresh_end {
+    return Intl.message(
+      'Refresh End',
+      name: 'fresh_end',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refresh Fail`
+  String get fresh_fail {
+    return Intl.message(
+      'Refresh Fail',
+      name: 'fresh_fail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pull To Refresh`
+  String get pull_to_fresh {
+    return Intl.message(
+      'Pull To Refresh',
+      name: 'pull_to_fresh',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Product`
+  String get product {
+    return Intl.message(
+      'Product',
+      name: 'product',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommend`
+  String get recommend {
+    return Intl.message(
+      'Recommend',
+      name: 'recommend',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

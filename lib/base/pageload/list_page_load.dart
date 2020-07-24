@@ -125,5 +125,6 @@ enum LoadType {
   LOAD_TYPE_ERROR_PULL_DOWN_LOAD, //下拉刷新错误
   LOAD_TYPE_ERROR_MORE_LOAD, //上拉加载错误
 
+  LOAD_TYPE_MORE_LOAD_END, //上拉加载结束，同时没有更多数据了
 
 }

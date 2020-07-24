@@ -52,7 +52,7 @@ class HttpManager {
 
     //内部定义一个方法。。
     resultError(DioError e) {
-      return new NetResultData(null, null, Code.NETWORK_ERROR, e.message, false);
+      return new NetResultData(null, null, Code.NETWORK_ERROR, /*e.message*/"网络失败", false);
     }
 
     Response response;

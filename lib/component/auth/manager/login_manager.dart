@@ -55,8 +55,9 @@ class LoginManager {
   Future<LoginBean> login(LoginParam loginParam) {
     return AuthNetUtils.login(loginParam).then((value) {
       //保存token到本地
-      LocalStorageUtils.save(AppConfig.KEY_TOKEN, value.token);
-      init(true, value.token);
+      String token = "${value.tokenHead} ${value.token}";
+      LocalStorageUtils.save(AppConfig.KEY_TOKEN, token);
+      init(true, token);
       eventBus.fire(LoginEvent(LoginEvent.TYPE_LOGIN_SUCCESS));
       ToastUtils.show("登录成功");
       return value;

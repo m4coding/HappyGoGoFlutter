@@ -6,8 +6,9 @@ class NetResultData {
   int code;
   String message;
   bool isSuccess;
+  Object otherData; //通用数据 不符合规则的数据（不是Map数据、也不是List数据）
 
-  NetResultData(this.listData, this.data, this.code, this.message, this.isSuccess);
+  NetResultData(this.listData, this.data, this.code, this.message, this.isSuccess, {this.otherData});
 }
 
 ///直接处理转换为bean数据

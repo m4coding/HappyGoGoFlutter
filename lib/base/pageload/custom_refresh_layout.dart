@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:happy_go_go_flutter/generated/l10n.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 ///下拉刷新，加载更多自定制layout
@@ -42,11 +43,11 @@ class _CustomRefreshLayoutState extends State<CustomRefreshLayout> {
 
   Widget _getHeader() {
     return ClassicHeader(
-      releaseText: "释放刷新",
-      refreshingText: "正在刷新",
-      completeText: "刷新完成",
-      failedText: "刷新失败",
-      idleText: "下拉刷新",);
+      releaseText: S.of(context).release_the_refresh,
+      refreshingText: S.of(context).is_pull_refreshing,
+      completeText: S.of(context).fresh_end,
+      failedText: S.of(context).fresh_fail,
+      idleText: S.of(context).pull_to_fresh,);
   }
 
   Widget _getFooter() {
@@ -58,11 +59,11 @@ class _CustomRefreshLayoutState extends State<CustomRefreshLayout> {
         } else if (mode == LoadStatus.loading) {
           body = CupertinoActivityIndicator();
         } else if (mode == LoadStatus.failed) {
-          body = Text("加载失败，点击重试");
+          body = Text(S.of(context).more_load_error);
         } else if (mode == LoadStatus.canLoading) {
           body = Text("");
         } else {
-          body = Text("没有更多数据了");
+          body = Text(S.of(context).more_load_end);
         }
         return Container(
           height: 55.0,

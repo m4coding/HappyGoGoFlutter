@@ -9,6 +9,8 @@ import 'package:happy_go_go_flutter/base/net/http_address.dart';
 import 'package:happy_go_go_flutter/base/pageload/list_page_load.dart';
 import 'package:happy_go_go_flutter/base/widgets/load_state_layout.dart';
 import 'package:happy_go_go_flutter/component/home/bean/home_product_item.dart';
+import 'package:happy_go_go_flutter/component/product/bean/product_detail_param.dart';
+import 'package:happy_go_go_flutter/component/product/product_manager.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -77,47 +79,54 @@ class _HomePageChildFirstStaggeredGridViewState
             itemBuilder: (BuildContext context, int index) {
               ProductChildBean productChildBean =
                   dataList[index].body.items[0];
-              return Container(
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(15))),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                          height: 200,
-                          child: ConstrainedBox(
-                            constraints: new BoxConstraints.expand(),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  topRight: Radius.circular(15),
-                                  bottomLeft: Radius.zero,
-                                  bottomRight: Radius.zero),
-                              child: CachedNetworkImage(
-                                imageUrl: productChildBean.imageUrl ?? "",
-                                fit: BoxFit.cover,
+              return GestureDetector(
+                onTap: () {
+                  ProductDetailParam param = new ProductDetailParam()
+                    ..productSkuId = productChildBean.productSkuId;
+                  ProductManager.goToProductDetail(context, param);
+                },
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(15))),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                            height: 200,
+                            child: ConstrainedBox(
+                              constraints: new BoxConstraints.expand(),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                    bottomLeft: Radius.zero,
+                                    bottomRight: Radius.zero),
+                                child: CachedNetworkImage(
+                                  imageUrl: productChildBean.imageUrl ?? "",
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-                          )),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
-                        child: Text(
-                          productChildBean.productName,
-                          maxLines: 2, //最大行数
-                          overflow: TextOverflow.ellipsis,
+                            )),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
+                          child: Text(
+                            productChildBean.productName,
+                            maxLines: 2, //最大行数
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                        child: Text(
-                          "¥${productChildBean.productPrice}",
-                          style: TextStyle(color: Colors.red),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                          child: Text(
+                            "¥${productChildBean.productPrice}",
+                            style: TextStyle(color: Colors.red),
+                          ),
                         ),
-                      ),
-                    ],
-                  ));
+                      ],
+                    )),
+              );
             },
             staggeredTileBuilder: (index) => StaggeredTile.fit(1),
             mainAxisSpacing: 10,

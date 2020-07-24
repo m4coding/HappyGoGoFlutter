@@ -10,5 +10,19 @@
   "register": "Register",
   "forget_password": "Forget Password",
   "new_user_register": "New User Register",
-  "login": "Login"
+  "login": "Login",
+  "add_to_cart": "AddCart",
+  "cart": "Cart",
+  "contact": "Contact",
+  "go_to_bug": "Buy",
+  "recommend_for_you": "Recommend For You",
+  "more_load_end": "Not More",
+  "more_load_error": "Load Fail, Click Retry",
+  "release_the_refresh": "Release Refresh",
+  "is_pull_refreshing": "Refreshing",
+  "fresh_end": "Refresh End",
+  "fresh_fail": "Refresh Fail",
+  "pull_to_fresh": "Pull To Refresh",
+  "product": "Product",
+  "recommend": "Recommend"
 }

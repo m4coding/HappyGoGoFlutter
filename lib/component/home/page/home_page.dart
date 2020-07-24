@@ -5,7 +5,7 @@ import 'package:happy_go_go_flutter/component/auth/manager/login_manager.dart';
 import 'package:happy_go_go_flutter/component/cart/page/home_page_child_cart.dart';
 import 'package:happy_go_go_flutter/component/home/page/category/home_page_child_category.dart';
 import 'package:happy_go_go_flutter/component/home/page/first/home_page_child_first.dart';
-import 'package:happy_go_go_flutter/component/home/page/home_page_child_person.dart';
+import 'package:happy_go_go_flutter/component/person/page/home_page_child_person.dart';
 import 'package:happy_go_go_flutter/generated/l10n.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
         onSinglePress: (index) {
           if (index == 2 || index == 3) { //购物车tab、我的tab需要登录状态下才能进入
             if (!LoginManager.getInstance().isLogin()) {
-                AuthPageManager.goToLoginPage(context);
+                AuthPageManager.goToLoginPage();
                 return true;
             }
           }

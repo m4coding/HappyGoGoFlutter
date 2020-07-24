@@ -9,4 +9,6 @@ class HttpAddress {
 
   static final String urlLogin = AppConfig.DOMAIN + "/api/user/v1/login"; //登录
   static final String urlRegister = AppConfig.DOMAIN + "/api/user/v1/register"; //注册
+
+  static final String urlGetProductDetail = AppConfig.DOMAIN + "/api/product/v1/getProductDetail"; // 获取商品详情信息
 }

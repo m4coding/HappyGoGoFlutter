@@ -21,17 +21,31 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "add_to_cart" : MessageLookupByLibrary.simpleMessage("AddCart"),
+    "cart" : MessageLookupByLibrary.simpleMessage("Cart"),
     "category" : MessageLookupByLibrary.simpleMessage("Category"),
+    "contact" : MessageLookupByLibrary.simpleMessage("Contact"),
     "forget_password" : MessageLookupByLibrary.simpleMessage("Forget Password"),
+    "fresh_end" : MessageLookupByLibrary.simpleMessage("Refresh End"),
+    "fresh_fail" : MessageLookupByLibrary.simpleMessage("Refresh Fail"),
+    "go_to_bug" : MessageLookupByLibrary.simpleMessage("Buy"),
     "home_page" : MessageLookupByLibrary.simpleMessage("Home"),
+    "is_pull_refreshing" : MessageLookupByLibrary.simpleMessage("Refreshing"),
     "login" : MessageLookupByLibrary.simpleMessage("Login"),
     "mine" : MessageLookupByLibrary.simpleMessage("Mine"),
+    "more_load_end" : MessageLookupByLibrary.simpleMessage("Not More"),
+    "more_load_error" : MessageLookupByLibrary.simpleMessage("Load Fail, Click Retry"),
     "new_user_register" : MessageLookupByLibrary.simpleMessage("New User Register"),
     "please_again_confirm_password" : MessageLookupByLibrary.simpleMessage("Please Again Confirm Password"),
     "please_input_password" : MessageLookupByLibrary.simpleMessage("Please Input Password"),
     "please_input_username" : MessageLookupByLibrary.simpleMessage("Please Input Username"),
+    "product" : MessageLookupByLibrary.simpleMessage("Product"),
+    "pull_to_fresh" : MessageLookupByLibrary.simpleMessage("Pull To Refresh"),
+    "recommend" : MessageLookupByLibrary.simpleMessage("Recommend"),
+    "recommend_for_you" : MessageLookupByLibrary.simpleMessage("Recommend For You"),
     "register" : MessageLookupByLibrary.simpleMessage("Register"),
     "register_user" : MessageLookupByLibrary.simpleMessage("RegisterUser"),
+    "release_the_refresh" : MessageLookupByLibrary.simpleMessage("Release Refresh"),
     "shopping_cart" : MessageLookupByLibrary.simpleMessage("Cart")
   };
 }

@@ -18,10 +18,8 @@ class TokenInterceptors extends InterceptorsWrapper {
     }
 
 
-    if (_token != null && options.data is String) {
-      Map<String, dynamic> map = json.decode(options.data);
-      map["usertoken"] = _token;
-      options.data = json.encode(map);
+    if (_token != null && _token.isNotEmpty) {
+      options.headers["Authorization"] = _token;
     }
 
     return options;

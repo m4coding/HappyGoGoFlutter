@@ -10,5 +10,19 @@
   "register": "注册",
   "forget_password": "忘记密码",
   "new_user_register": "新用户注册",
-  "login": "登录"
+  "login": "登录",
+  "add_to_cart": "加入购物车",
+  "cart": "购物车",
+  "contact": "联系客服",
+  "go_to_bug": "立即购买",
+  "recommend_for_you": "为你推荐",
+  "more_load_end": "没有更多数据了",
+  "more_load_error": "加载失败，点击重试",
+  "release_the_refresh": "释放刷新",
+  "is_pull_refreshing": "正在刷新",
+  "fresh_end": "刷新完成",
+  "fresh_fail": "刷新失败",
+  "pull_to_fresh": "下拉刷新",
+  "product": "商品",
+  "recommend": "推荐"
 }

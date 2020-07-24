@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:happy_go_go_flutter/base/app_navigator_observer.dart';
 import 'package:happy_go_go_flutter/base/event/event_bus.dart';
 import 'package:happy_go_go_flutter/base/utils/log_utils.dart';
 import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
@@ -17,8 +18,15 @@ import 'package:happy_go_go_flutter/style/app_colors.dart';
 class LoginPage extends StatefulWidget {
   static const String sName = "LoginPage";
 
-  static void newInstance(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
+//  static void newInstance(BuildContext context) {
+//    Navigator.push(context, MaterialPageRoute(builder: (_) {
+//      return LoginPage();
+//    }));
+//  }
+
+  static void newInstanceNotContext() {
+    AppNavigatorObserver.instance.navigator
+        .push(MaterialPageRoute(builder: (_) {
       return LoginPage();
     }));
   }

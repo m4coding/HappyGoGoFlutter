@@ -7,6 +7,7 @@ import 'package:happy_go_go_flutter/component/welcome/welcome_page.dart';
 import 'package:happy_go_go_flutter/generated/l10n.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
+import 'base/app_navigator_observer.dart';
 import 'base/config/config.dart';
 import 'component/home/page/home_page.dart';
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorObservers:[AppNavigatorObserver.instance],
       localizationsDelegates: const [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -44,7 +46,6 @@ class MyApp extends StatelessWidget {
       ],
       // 讲en设置为第一项,没有适配语言时,英语为首选项
       supportedLocales: S.delegate.supportedLocales,
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: AppColors.primarySwatch,
       ),

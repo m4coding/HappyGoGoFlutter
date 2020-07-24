@@ -3,9 +3,7 @@ import 'package:dio/dio.dart';
 
 import '../../config/config.dart';
 
-/**
- * Log 拦截器
- */
+/// Log 拦截器
 class LogsInterceptors extends InterceptorsWrapper {
 
   @override
