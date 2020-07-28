@@ -7,6 +7,8 @@ import 'package:happy_go_go_flutter/base/net/http_address.dart';
 import 'package:happy_go_go_flutter/base/pageload/list_page_load.dart';
 import 'package:happy_go_go_flutter/base/utils/log_utils.dart';
 import 'package:happy_go_go_flutter/component/home/bean/home_product_item.dart';
+import 'package:happy_go_go_flutter/component/product/bean/product_detail_param.dart';
+import 'package:happy_go_go_flutter/component/product/product_manager.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///商品详情--为你推荐
@@ -52,47 +54,54 @@ class ProductDetailRecommendLayoutState
 
             ProductChildBean productChildBean = _dataList[index].body.items[0];
 
-            return Container(
-                decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(8))),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                        height: 180,
-                        child: ConstrainedBox(
-                          constraints: new BoxConstraints.expand(),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8),
-                                bottomLeft: Radius.zero,
-                                bottomRight: Radius.zero),
-                            child: CachedNetworkImage(
-                              imageUrl: productChildBean.imageUrl ?? "",
-                              fit: BoxFit.contain,
+            return GestureDetector(
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                          height: 180,
+                          child: ConstrainedBox(
+                            constraints: new BoxConstraints.expand(),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                  bottomLeft: Radius.zero,
+                                  bottomRight: Radius.zero),
+                              child: CachedNetworkImage(
+                                imageUrl: productChildBean.imageUrl ?? "",
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                          ),
-                        )),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
-                      child: Text(
-                        productChildBean.productName,
-                        maxLines: 2, //最大行数
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 13, color: AppColors.primary_text),
+                          )),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
+                        child: Text(
+                          productChildBean.productName,
+                          maxLines: 2, //最大行数
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 13, color: AppColors.primary_text),
+                        ),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                      child: Text(
-                        "¥${productChildBean.productPrice}",
-                        style: TextStyle(color: Colors.red),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                        child: Text(
+                          "¥${productChildBean.productPrice}",
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
-                    ),
-                  ],
-                ));
+                    ],
+                  )),
+              onTap: () {
+                ProductDetailParam param = new ProductDetailParam()
+                  ..productSkuId = productChildBean.productSkuId;
+                ProductManager.goToProductDetail(context, param);
+              },
+            );
           },
           childCount: _getItemCount(),
         ));

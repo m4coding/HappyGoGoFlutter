@@ -6,6 +6,7 @@ import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
 import 'package:happy_go_go_flutter/base/widgets/custom_banner.dart';
 import 'package:happy_go_go_flutter/component/product/bean/product_detail_bean.dart';
 import 'package:happy_go_go_flutter/component/product/bean/product_detail_param.dart';
+import 'package:happy_go_go_flutter/component/product/dialog/product_detail_shopping_dialog.dart';
 import 'package:happy_go_go_flutter/component/product/net/product_net_utils.dart';
 import 'package:happy_go_go_flutter/component/product/wigets/product_detail_load_footer.dart';
 import 'package:happy_go_go_flutter/component/product/wigets/product_detail_recommend_layout.dart';
@@ -397,7 +398,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100)),
                 color: Colors.red,
-                onPressed: () {},
+                onPressed: () {
+                  ProductDetailShoppingDialog.show(_productDetailBean);
+                },
               ),
               RaisedButton(
                 elevation: 0,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:happy_go_go_flutter/base/widgets/dialog/h_dialog.dart';
 import 'package:happy_go_go_flutter/component/welcome/welcome_page.dart';
 import 'package:happy_go_go_flutter/generated/l10n.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
@@ -36,6 +37,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       navigatorObservers:[AppNavigatorObserver.instance],
       localizationsDelegates: const [
@@ -54,6 +56,10 @@ class MyApp extends StatelessWidget {
           return new WelcomePage();
         },
         HomePage.sName : (context) {
+
+          //HDialog context
+          HDialog.init(context);
+
           return new HomePage();
         }
       },

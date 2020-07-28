@@ -11,4 +11,10 @@ class HttpAddress {
   static final String urlRegister = AppConfig.DOMAIN + "/api/user/v1/register"; //注册
 
   static final String urlGetProductDetail = AppConfig.DOMAIN + "/api/product/v1/getProductDetail"; // 获取商品详情信息
+
+  static final String urlAddCart = AppConfig.DOMAIN + "/api/cart/v1/add";
+  static final String urlDeleteFromCart = AppConfig.DOMAIN + "/api/cart/v1/delete";
+  static final String urlGetCartCount = AppConfig.DOMAIN + "/api/cart/v1/getCartCount";
+  static final String urlGetCartInfo = AppConfig.DOMAIN + "/api/cart/v1/getCartInfo";
+  static final String urlUpdateCartInfo = AppConfig.DOMAIN + "/api/cart/v1/updateCartInfo";
 }

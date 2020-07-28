@@ -8,6 +8,8 @@ import 'package:happy_go_go_flutter/base/widgets/status_bar_compat_widget.dart';
 import 'package:happy_go_go_flutter/component/home/bean/category_bean.dart';
 import 'package:happy_go_go_flutter/component/home/bean/home_product_item.dart';
 import 'package:happy_go_go_flutter/component/home/net/home_net_utils.dart';
+import 'package:happy_go_go_flutter/component/product/bean/product_detail_param.dart';
+import 'package:happy_go_go_flutter/component/product/product_manager.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -208,6 +210,11 @@ class __CategoryContentWidgetState extends State<_CategoryContentWidget>
                     ],
                   ),
                 ),
+                onTap: () {
+                  ProductDetailParam param = new ProductDetailParam()
+                    ..productSkuId = productChildBean.productSkuId;
+                  ProductManager.goToProductDetail(context, param);
+                },
               );
             },
             separatorBuilder: (context, index) {
