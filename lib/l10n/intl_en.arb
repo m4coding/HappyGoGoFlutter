@@ -24,5 +24,8 @@
   "fresh_fail": "Refresh Fail",
   "pull_to_fresh": "Pull To Refresh",
   "product": "Product",
-  "recommend": "Recommend"
+  "recommend": "Recommend",
+  "all_check": "AllCheck",
+  "count": "count",
+  "total_price": "Total Price:"
 }

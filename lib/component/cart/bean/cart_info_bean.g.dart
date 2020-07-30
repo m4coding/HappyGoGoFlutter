@@ -29,7 +29,9 @@ CartProductInfoBean _$CartProductInfoBeanFromJson(Map<String, dynamic> json) {
     ..productName = json['productName'] as String
     ..productOrgPrice = json['productOrgPrice'] as String
     ..productPrice = json['productPrice'] as String
-    ..productSkuId = json['productSkuId'] as int;
+    ..productSkuId = json['productSkuId'] as int
+    ..stock = json['stock'] as int
+    ..quantity = json['quantity'] as int;
 }
 
 Map<String, dynamic> _$CartProductInfoBeanToJson(
@@ -43,4 +45,6 @@ Map<String, dynamic> _$CartProductInfoBeanToJson(
       'productOrgPrice': instance.productOrgPrice,
       'productPrice': instance.productPrice,
       'productSkuId': instance.productSkuId,
+      'stock': instance.stock,
+      'quantity': instance.quantity,
     };

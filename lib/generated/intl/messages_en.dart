@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "add_to_cart" : MessageLookupByLibrary.simpleMessage("AddCart"),
+    "all_check" : MessageLookupByLibrary.simpleMessage("AllCheck"),
     "cart" : MessageLookupByLibrary.simpleMessage("Cart"),
     "category" : MessageLookupByLibrary.simpleMessage("Category"),
     "contact" : MessageLookupByLibrary.simpleMessage("Contact"),
+    "count" : MessageLookupByLibrary.simpleMessage("count"),
     "forget_password" : MessageLookupByLibrary.simpleMessage("Forget Password"),
     "fresh_end" : MessageLookupByLibrary.simpleMessage("Refresh End"),
     "fresh_fail" : MessageLookupByLibrary.simpleMessage("Refresh Fail"),
@@ -46,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "register" : MessageLookupByLibrary.simpleMessage("Register"),
     "register_user" : MessageLookupByLibrary.simpleMessage("RegisterUser"),
     "release_the_refresh" : MessageLookupByLibrary.simpleMessage("Release Refresh"),
-    "shopping_cart" : MessageLookupByLibrary.simpleMessage("Cart")
+    "shopping_cart" : MessageLookupByLibrary.simpleMessage("Cart"),
+    "total_price" : MessageLookupByLibrary.simpleMessage("Total Price:")
   };
 }

@@ -292,6 +292,36 @@ class S {
       args: [],
     );
   }
+
+  /// `AllCheck`
+  String get all_check {
+    return Intl.message(
+      'AllCheck',
+      name: 'all_check',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `count`
+  String get count {
+    return Intl.message(
+      'count',
+      name: 'count',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Price:`
+  String get total_price {
+    return Intl.message(
+      'Total Price:',
+      name: 'total_price',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

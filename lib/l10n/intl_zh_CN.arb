@@ -24,5 +24,8 @@
   "fresh_fail": "刷新失败",
   "pull_to_fresh": "下拉刷新",
   "product": "商品",
-  "recommend": "推荐"
+  "recommend": "推荐",
+  "all_check": "全选",
+  "count": "结算",
+  "total_price": "合计："
 }

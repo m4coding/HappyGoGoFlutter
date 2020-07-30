@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "add_to_cart" : MessageLookupByLibrary.simpleMessage("加入购物车"),
+    "all_check" : MessageLookupByLibrary.simpleMessage("全选"),
     "cart" : MessageLookupByLibrary.simpleMessage("购物车"),
     "category" : MessageLookupByLibrary.simpleMessage("分类"),
     "contact" : MessageLookupByLibrary.simpleMessage("联系客服"),
+    "count" : MessageLookupByLibrary.simpleMessage("结算"),
     "forget_password" : MessageLookupByLibrary.simpleMessage("忘记密码"),
     "fresh_end" : MessageLookupByLibrary.simpleMessage("刷新完成"),
     "fresh_fail" : MessageLookupByLibrary.simpleMessage("刷新失败"),
@@ -46,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "register" : MessageLookupByLibrary.simpleMessage("注册"),
     "register_user" : MessageLookupByLibrary.simpleMessage("注册用户"),
     "release_the_refresh" : MessageLookupByLibrary.simpleMessage("释放刷新"),
-    "shopping_cart" : MessageLookupByLibrary.simpleMessage("购物车")
+    "shopping_cart" : MessageLookupByLibrary.simpleMessage("购物车"),
+    "total_price" : MessageLookupByLibrary.simpleMessage("合计：")
   };
 }
