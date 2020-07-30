@@ -21,6 +21,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  GlobalKey<HomePageChildCartState> _cartKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -79,7 +81,7 @@ class _HomePageState extends State<HomePage> {
         tabViews: <Widget>[
           new HomePageChildFirst(),
           new HomePageChildCategory(),
-          new HomePageChildCart(),
+          new HomePageChildCart(key: _cartKey),
           new HomePageChildPerson(),
         ],
         indicatorColor: AppColors.transparent,
@@ -87,6 +89,17 @@ class _HomePageState extends State<HomePage> {
         pageViewCanScroll: false,
         isShowAppBar: false,
         pageController: new PageController(),
+        onPageChanged: (index) {
+          if (index == 2) {
+            Future.delayed(Duration(milliseconds: 100), () { //延时一段时间，为了currentState已初始化成功
+              _cartKey.currentState?.isVisibleInTab = true;
+            });
+            _cartKey.currentState?.load();
+          } else {
+            _cartKey.currentState?.isVisibleInTab = false;
+            _cartKey.currentState?.updateCartInfo();
+          }
+        },
         onSinglePress: (index) {
           if (index == 2 || index == 3) { //购物车tab、我的tab需要登录状态下才能进入
             if (!LoginManager.getInstance().isLogin()) {

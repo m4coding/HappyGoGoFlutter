@@ -102,10 +102,11 @@ class _TabBarState extends State<TabBarWidget>
     }
 
     _index = index;
-    widget.onPageChanged?.call(index);
 
     ///不想要动画
     widget.pageController.jumpTo(MediaQuery.of(context).size.width * index);
+
+    widget.onPageChanged?.call(index);
 
     return false;
   }

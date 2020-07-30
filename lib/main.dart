@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
-      navigatorObservers:[AppNavigatorObserver.instance],
+      navigatorObservers:[AppNavigatorObserver.instance, AppNavigatorObserver.routeObserver],
       localizationsDelegates: const [
         S.delegate,
         GlobalMaterialLocalizations.delegate,

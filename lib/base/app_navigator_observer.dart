@@ -5,6 +5,8 @@ import 'package:happy_go_go_flutter/component/home/page/home_page.dart';
 class AppNavigatorObserver extends NavigatorObserver{
   static AppNavigatorObserver _instance;
 
+  static final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
   static AppNavigatorObserver _getInstance() {
     if (_instance == null) {
       _instance = AppNavigatorObserver();

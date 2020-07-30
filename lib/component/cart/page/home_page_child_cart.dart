@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:happy_go_go_flutter/base/app_navigator_observer.dart';
 import 'package:happy_go_go_flutter/base/pageload/custom_refresh_layout.dart';
 import 'package:happy_go_go_flutter/base/pageload/list_page_load.dart';
 import 'package:happy_go_go_flutter/base/utils/log_utils.dart';
@@ -18,16 +20,22 @@ import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///首页子tab-购物车页
 class HomePageChildCart extends StatefulWidget {
+
+  HomePageChildCart({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
-    return new _HomePageChildCartState();
+    return HomePageChildCartState();
   }
 }
 
-class _HomePageChildCartState extends State<HomePageChildCart>
-    with AutomaticKeepAliveClientMixin, ListPageLoad<CartProductInfoBean>, WidgetsBindingObserver {
+class HomePageChildCartState extends State<HomePageChildCart>
+    with AutomaticKeepAliveClientMixin, ListPageLoad<CartProductInfoBean>, WidgetsBindingObserver, RouteAware {
 
   bool _isKeyboardShow = false;
+  bool isVisibleInTab = false;
+  double _preOffset = 0;
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -37,11 +45,52 @@ class _HomePageChildCartState extends State<HomePageChildCart>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    AppNavigatorObserver.routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
   void dispose() {
     super.dispose();
 
     WidgetsBinding.instance.removeObserver(this);
+    AppNavigatorObserver.routeObserver.unsubscribe(this);
+    _scrollController?.dispose();
+    _scrollController = null;
   }
+
+  @override
+  void didPushNext() {
+    super.didPushNext();
+
+    //路由：跳到其他页面
+    if (isVisibleInTab) {
+      updateCartInfo();
+    }
+  }
+
+  @override
+  void didPopNext() {
+    super.didPopNext();
+
+    //路由：从其他页面回来本页面
+    if (isVisibleInTab) {
+      load();
+    }
+  }
+
+  @override
+  void load() {
+
+    super.load();
+
+    setState(() {
+
+    });
+  }
+
 
   @override
   void didChangeMetrics() {
@@ -63,19 +112,37 @@ class _HomePageChildCartState extends State<HomePageChildCart>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    logger.d("didChangeAppLifecycleState", "$state");
-  }
+    switch(state) {
+      case AppLifecycleState.paused:
+        if (isVisibleInTab) {
+          updateCartInfo();
+        }
+        break;
+      case AppLifecycleState.resumed:
+        if (isVisibleInTab) {
+          load();
+          setState(() {
 
-  @override
-  void deactivate() {
-    super.deactivate();
-
-    logger.d("deactivate", "deactivate");
+          });
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    if (_scrollController != null) {
+      _scrollController.dispose();
+    }
+
+    _scrollController = ScrollController(initialScrollOffset: _preOffset);
+    _scrollController.addListener(() {
+      _preOffset = _scrollController.offset;
+    });
 
     return Scaffold(
       appBar: CommonBar(
@@ -93,10 +160,11 @@ class _HomePageChildCartState extends State<HomePageChildCart>
                 enablePullDown: true,
                 controller: refreshController,
                 onRefresh: () async {
-                  await _updateCartInfo();
+                  await updateCartInfo();
                   onRefresh();
                 },
                 child: ListView.separated(
+                  controller: _scrollController,
                   padding: EdgeInsets.only(top: 10),
                   itemBuilder: (context, index) {
                     CartProductInfoBean cartProductInfoBean =
@@ -359,7 +427,7 @@ class _HomePageChildCartState extends State<HomePageChildCart>
     ProductManager.goToProductDetail(context, productDetailParam);
   }
 
-  Future<bool> _updateCartInfo() async {
+  Future<bool> updateCartInfo() async {
     return CartDataManager.getInstance().updateCartInfo();
   }
 
