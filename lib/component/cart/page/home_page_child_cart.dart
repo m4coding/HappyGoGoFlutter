@@ -12,6 +12,7 @@ import 'package:happy_go_go_flutter/base/widgets/dialog/common_dialog_utils.dart
 import 'package:happy_go_go_flutter/base/widgets/dialog/h_dialog.dart';
 import 'package:happy_go_go_flutter/base/widgets/load_state_layout.dart';
 import 'package:happy_go_go_flutter/component/cart/bean/cart_info_bean.dart';
+import 'package:happy_go_go_flutter/component/cart/bean/cart_page_params.dart';
 import 'package:happy_go_go_flutter/component/cart/data/cart_data_manager.dart';
 import 'package:happy_go_go_flutter/component/cart/net/cart_net_utils.dart';
 import 'package:happy_go_go_flutter/component/cart/widgets/add_cart_count_view.dart';
@@ -22,7 +23,19 @@ import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///首页子tab-购物车页
 class HomePageChildCart extends StatefulWidget {
-  HomePageChildCart({Key key}) : super(key: key);
+
+  final CartPageParams cartPageParams;
+
+  static newInstance(
+      BuildContext context, CartPageParams cartPageParams) {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) {
+        return HomePageChildCart(cartPageParams: cartPageParams);
+      },
+    ));
+  }
+
+  HomePageChildCart({Key key, this.cartPageParams}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -151,7 +164,7 @@ class HomePageChildCartState extends State<HomePageChildCart>
         rightDMActions: <Widget>[
           GestureDetector(
             child: Offstage(
-              offstage: CartDataManager.getInstance().cartInfoBean.productList?.isEmpty == true,
+              offstage: CartDataManager.getInstance().cartInfoBean?.productList?.isEmpty == true,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Center(

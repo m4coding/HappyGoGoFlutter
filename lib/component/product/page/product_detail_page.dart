@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:happy_go_go_flutter/base/pageload/list_page_load.dart';
-import 'package:happy_go_go_flutter/base/utils/log_utils.dart';
 import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
 import 'package:happy_go_go_flutter/base/widgets/custom_banner.dart';
+import 'package:happy_go_go_flutter/component/cart/cart_page_manager.dart';
 import 'package:happy_go_go_flutter/component/product/bean/product_detail_bean.dart';
 import 'package:happy_go_go_flutter/component/product/bean/product_detail_param.dart';
 import 'package:happy_go_go_flutter/component/product/dialog/product_detail_shopping_dialog.dart';
@@ -369,21 +368,26 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   )
                 ],
               ),
-              Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.shopping_cart,
-                    color: AppColors.primary_text,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 2),
-                  ),
-                  Text(
-                    S.of(context).cart,
-                    style:
-                        TextStyle(color: AppColors.primary_text, fontSize: 13),
-                  )
-                ],
+              GestureDetector(
+                child: Column(
+                  children: <Widget>[
+                    Icon(
+                      Icons.shopping_cart,
+                      color: AppColors.primary_text,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 2),
+                    ),
+                    Text(
+                      S.of(context).cart,
+                      style:
+                          TextStyle(color: AppColors.primary_text, fontSize: 13),
+                    )
+                  ],
+                ),
+                onTap: () {
+                  CartPageManager.goToCartPage(context);
+                },
               ),
               RaisedButton(
                 elevation: 0,

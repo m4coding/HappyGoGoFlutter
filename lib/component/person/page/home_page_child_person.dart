@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
 import 'package:happy_go_go_flutter/component/person/bean/user_info_bean.dart';
+import 'package:happy_go_go_flutter/component/person/net/person_net_utils.dart';
 import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///首页子tab-个人中心tab
@@ -14,6 +16,13 @@ class HomePageChildPerson extends StatefulWidget {
 class _HomePageChildPersonState extends State<HomePageChildPerson>
     with AutomaticKeepAliveClientMixin {
   UserInfoBean _userInfoBean;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getNetData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +84,7 @@ class _HomePageChildPersonState extends State<HomePageChildPerson>
                           padding: EdgeInsets.only(right: 15),
                         ),
                         Text(
-                          _userInfoBean?.username ?? "--",
+                          _userInfoBean?.userName ?? "--",
                           style:
                               TextStyle(color: AppColors.white, fontSize: 20),
                         )
@@ -184,5 +193,15 @@ class _HomePageChildPersonState extends State<HomePageChildPerson>
   //todo 设置页面
   void _goToSetting() {
 
+  }
+
+  void _getNetData() {
+    PersonNetUtils.getUserInfo().then((value) {
+      setState(() {
+        _userInfoBean = value;
+      });
+    }).catchError((error) {
+      ToastUtils.show(error.toString());
+    });
   }
 }
