@@ -58,6 +58,13 @@ class HomePageChildCartState extends State<HomePageChildCart>
   @override
   void initState() {
     super.initState();
+
+    if (widget.cartPageParams != null) {
+      if (widget.cartPageParams.isSinglePage) {
+        isVisibleInTab = true;
+      }
+    }
+
     WidgetsBinding.instance.addObserver(this);
     load();
   }

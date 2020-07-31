@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
 import 'package:happy_go_go_flutter/base/widgets/custom_banner.dart';
+import 'package:happy_go_go_flutter/component/cart/bean/cart_page_params.dart';
 import 'package:happy_go_go_flutter/component/cart/cart_page_manager.dart';
 import 'package:happy_go_go_flutter/component/product/bean/product_detail_bean.dart';
 import 'package:happy_go_go_flutter/component/product/bean/product_detail_param.dart';
@@ -386,7 +387,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ],
                 ),
                 onTap: () {
-                  CartPageManager.goToCartPage(context);
+                  CartPageParams params = CartPageParams()..isSinglePage = true;
+                  CartPageManager.goToCartPage(context, cartPageParams: params);
                 },
               ),
               RaisedButton(
