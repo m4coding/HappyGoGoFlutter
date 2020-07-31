@@ -96,6 +96,7 @@ class _HomePageState extends State<HomePage> {
             });
             _cartKey.currentState?.load();
           } else {
+            _cartKey.currentState?.isEditMode = false;
             _cartKey.currentState?.isVisibleInTab = false;
             _cartKey.currentState?.updateCartInfo();
           }

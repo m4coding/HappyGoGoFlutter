@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:happy_go_go_flutter/base/app_navigator_observer.dart';
 import 'package:happy_go_go_flutter/base/pageload/custom_refresh_layout.dart';
 import 'package:happy_go_go_flutter/base/pageload/list_page_load.dart';
 import 'package:happy_go_go_flutter/base/utils/log_utils.dart';
 import 'package:happy_go_go_flutter/base/utils/toast_utils.dart';
 import 'package:happy_go_go_flutter/base/widgets/bar/common_bar.dart';
+import 'package:happy_go_go_flutter/base/widgets/dialog/common_dialog_utils.dart';
 import 'package:happy_go_go_flutter/base/widgets/dialog/h_dialog.dart';
 import 'package:happy_go_go_flutter/base/widgets/load_state_layout.dart';
 import 'package:happy_go_go_flutter/component/cart/bean/cart_info_bean.dart';
@@ -20,7 +22,6 @@ import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///首页子tab-购物车页
 class HomePageChildCart extends StatefulWidget {
-
   HomePageChildCart({Key key}) : super(key: key);
 
   @override
@@ -30,10 +31,14 @@ class HomePageChildCart extends StatefulWidget {
 }
 
 class HomePageChildCartState extends State<HomePageChildCart>
-    with AutomaticKeepAliveClientMixin, ListPageLoad<CartProductInfoBean>, WidgetsBindingObserver, RouteAware {
-
+    with
+        AutomaticKeepAliveClientMixin,
+        ListPageLoad<CartProductInfoBean>,
+        WidgetsBindingObserver,
+        RouteAware {
   bool _isKeyboardShow = false;
   bool isVisibleInTab = false;
+  bool isEditMode = false; //是否是编辑模式
   double _preOffset = 0;
   ScrollController _scrollController = ScrollController();
 
@@ -69,6 +74,8 @@ class HomePageChildCartState extends State<HomePageChildCart>
     if (isVisibleInTab) {
       updateCartInfo();
     }
+
+    isEditMode = false;
   }
 
   @override
@@ -83,14 +90,10 @@ class HomePageChildCartState extends State<HomePageChildCart>
 
   @override
   void load() {
-
     super.load();
 
-    setState(() {
-
-    });
+    setState(() {});
   }
-
 
   @override
   void didChangeMetrics() {
@@ -102,9 +105,7 @@ class HomePageChildCartState extends State<HomePageChildCart>
       } else {
         _isKeyboardShow = false;
       }
-      setState(() {
-
-      });
+      setState(() {});
     });
   }
 
@@ -112,18 +113,17 @@ class HomePageChildCartState extends State<HomePageChildCart>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    switch(state) {
+    switch (state) {
       case AppLifecycleState.paused:
         if (isVisibleInTab) {
           updateCartInfo();
         }
+        isEditMode = false;
         break;
       case AppLifecycleState.resumed:
         if (isVisibleInTab) {
           load();
-          setState(() {
-
-          });
+          setState(() {});
         }
         break;
       default:
@@ -148,16 +148,46 @@ class HomePageChildCartState extends State<HomePageChildCart>
       appBar: CommonBar(
         title: S.of(context).shopping_cart,
         leadingW: Container(),
+        rightDMActions: <Widget>[
+          GestureDetector(
+            child: Offstage(
+              offstage: CartDataManager.getInstance().cartInfoBean.productList?.isEmpty == true,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Center(
+                    child: Text(isEditMode ? "完成" : "编辑",
+                        style: TextStyle(
+                            color: AppColors.primary_text, fontSize: 16))),
+              ),
+            ),
+            onTap: () {
+              setState(() {
+                isEditMode = !isEditMode;
+
+                if (!isEditMode) {
+                  //退出编辑模式时，先重置bean的编辑状态下的可选状态
+                  for (CartProductInfoBean infoBean
+                      in CartDataManager.getInstance()
+                          .cartInfoBean
+                          .productList) {
+                    infoBean.isEditSelect = false;
+                  }
+                }
+              });
+            },
+          ),
+        ],
       ),
       body: LoadStateLayout(
         backgroundColor: AppColors.fff5f5f5,
         state: getLoadStateLayoutState(),
+        errorRetry: load,
         successWidget: Column(
           children: <Widget>[
             Expanded(
               child: CustomRefreshLayout(
                 enablePullUp: false,
-                enablePullDown: true,
+                enablePullDown: isEditMode ? false : true,
                 controller: refreshController,
                 onRefresh: () async {
                   await updateCartInfo();
@@ -168,23 +198,34 @@ class HomePageChildCartState extends State<HomePageChildCart>
                   padding: EdgeInsets.only(top: 10),
                   itemBuilder: (context, index) {
                     CartProductInfoBean cartProductInfoBean =
-                        CartDataManager.getInstance().cartInfoBean.productList[index];
+                        CartDataManager.getInstance()
+                            .cartInfoBean
+                            .productList[index];
 
                     return Container(
                       color: Colors.white,
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       child: Row(
                         children: <Widget>[
                           GestureDetector(
                             child: Container(
                                 padding: EdgeInsets.only(right: 15),
                                 child: Icon(
-                                  cartProductInfoBean.itemStatus == 1
-                                      ? Icons.check_circle
-                                      : Icons.radio_button_unchecked,
-                                  color: cartProductInfoBean.itemStatus == 1
-                                      ? Colors.red
-                                      : AppColors.ff999999,
+                                  !isEditMode
+                                      ? cartProductInfoBean.itemStatus == 1
+                                          ? Icons.check_circle
+                                          : Icons.radio_button_unchecked
+                                      : cartProductInfoBean.isEditSelect
+                                          ? Icons.check_circle
+                                          : Icons.radio_button_unchecked,
+                                  color: !isEditMode
+                                      ? cartProductInfoBean.itemStatus == 1
+                                          ? Colors.red
+                                          : AppColors.ff999999
+                                      : cartProductInfoBean.isEditSelect
+                                          ? Colors.red
+                                          : AppColors.ff999999,
                                   size: 20,
                                 )),
                             onTap: () {
@@ -193,7 +234,8 @@ class HomePageChildCartState extends State<HomePageChildCart>
                           ),
                           GestureDetector(
                             child: ClipRRect(
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
                               child: CachedNetworkImage(
                                 width: 100,
                                 height: 100,
@@ -263,9 +305,7 @@ class HomePageChildCartState extends State<HomePageChildCart>
                                       },
                                       onEditTap: () {
                                         _isKeyboardShow = true;
-                                        setState(() {
-
-                                        });
+                                        setState(() {});
                                       },
                                     )
                                   ],
@@ -277,7 +317,11 @@ class HomePageChildCartState extends State<HomePageChildCart>
                       ),
                     );
                   },
-                  itemCount: CartDataManager.getInstance().cartInfoBean?.productList?.length ?? 0,
+                  itemCount: CartDataManager.getInstance()
+                          .cartInfoBean
+                          ?.productList
+                          ?.length ??
+                      0,
                   separatorBuilder: (context, index) {
                     return Container(
                       height: 10,
@@ -303,9 +347,16 @@ class HomePageChildCartState extends State<HomePageChildCart>
     if (CartDataManager.getInstance().cartInfoBean != null) {
       for (CartProductInfoBean cartProductInfoBean
           in CartDataManager.getInstance().cartInfoBean.productList) {
-        if (cartProductInfoBean.itemStatus == 1) {
-          i++;
-          totalPrice += double.parse(cartProductInfoBean.productPrice) * cartProductInfoBean.quantity;
+        if (!isEditMode) {
+          if (cartProductInfoBean.itemStatus == 1) {
+            i++;
+            totalPrice += double.parse(cartProductInfoBean.productPrice) *
+                cartProductInfoBean.quantity;
+          }
+        } else {
+          if (cartProductInfoBean.isEditSelect) {
+            i++;
+          }
         }
       }
       if (i == CartDataManager.getInstance().cartInfoBean.productList?.length) {
@@ -313,10 +364,15 @@ class HomePageChildCartState extends State<HomePageChildCart>
       }
     }
 
-    Widget child =  Column(
+    Widget child = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Container(height: 1, color: AppColors.fff5f5f5,),
         Container(
+          height: 1,
+          color: AppColors.fff5f5f5,
+        ),
+        Container(
+          height: 60,
           color: Colors.white,
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 2),
           child: Row(
@@ -324,7 +380,9 @@ class HomePageChildCartState extends State<HomePageChildCart>
             children: <Widget>[
               GestureDetector(
                 child: Icon(
-                  isAllSelect ? Icons.check_circle : Icons.radio_button_unchecked,
+                  isAllSelect
+                      ? Icons.check_circle
+                      : Icons.radio_button_unchecked,
                   color: isAllSelect ? Colors.red : AppColors.ff999999,
                   size: 20,
                 ),
@@ -344,39 +402,64 @@ class HomePageChildCartState extends State<HomePageChildCart>
                   _clickAllCheck(!isAllSelect);
                 },
               ),
-              Container(
-                margin: EdgeInsets.only(
-                  left: 10,
-                ),
-                child: Text(
-                  "${S.of(context).total_price} ¥$totalPrice",
-                  style: TextStyle(color: AppColors.primary_text, fontSize: 16),
+              Offstage(
+                offstage: isEditMode,
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: 10,
+                  ),
+                  child: Text(
+                    "${S.of(context).total_price} ¥$totalPrice",
+                    style:
+                        TextStyle(color: AppColors.primary_text, fontSize: 16),
+                  ),
                 ),
               ),
               Expanded(
                 child: Container(),
               ),
-              RaisedButton(
-                elevation: 0,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-                  child: Center(
-                      child: Text(
-                        "${S.of(context).count}($i)",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                        textAlign: TextAlign.center,
-                      )),
-                ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100)),
-                color: Colors.red,
-                onPressed: () {
-                  if (i == 0) {
-                    ToastUtils.show("请先选择商品");
-                    return;
-                  }
-                },
-              ),
+              !isEditMode
+                  ? RaisedButton(
+                      elevation: 0,
+                      child: Container(
+                        height: 42,
+                        child: Center(
+                            child: Text(
+                          "${S.of(context).count}($i)",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                          textAlign: TextAlign.center,
+                        )),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100)),
+                      color: Colors.red,
+                      onPressed: () {
+                        if (i == 0) {
+                          ToastUtils.show("请先选择商品");
+                          return;
+                        }
+                      },
+                    )
+                  : GestureDetector(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                        decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                            border: Border.all(
+                                color: Colors.red, style: BorderStyle.solid)),
+                        child: Text(
+                          "删除",
+                          style: TextStyle(color: Colors.red, fontSize: 18),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      onTap: () {
+                        _deleteByCheck();
+                      },
+                    ),
             ],
           ),
         ),
@@ -387,32 +470,75 @@ class HomePageChildCartState extends State<HomePageChildCart>
   }
 
   void _clickCheck(int index, CartProductInfoBean cartProductInfoBean) {
-    if (cartProductInfoBean.itemStatus == 1) {
-      cartProductInfoBean.itemStatus = 0;
-    } else if (cartProductInfoBean.itemStatus == 0) {
-      cartProductInfoBean.itemStatus = 1;
+    if (!isEditMode) {
+      if (cartProductInfoBean.itemStatus == 1) {
+        cartProductInfoBean.itemStatus = 0;
+      } else if (cartProductInfoBean.itemStatus == 0) {
+        cartProductInfoBean.itemStatus = 1;
+      }
+    } else {
+      cartProductInfoBean.isEditSelect = !cartProductInfoBean.isEditSelect;
     }
+
     setState(() {});
   }
 
   void _clickAllCheck(bool allCheck) {
-    if (CartDataManager.getInstance().cartInfoBean != null) {
-      for (CartProductInfoBean cartProductInfoBean
-          in CartDataManager.getInstance().cartInfoBean.productList) {
-        cartProductInfoBean.itemStatus = allCheck ? 1 : 0;
-      }
+    if (!isEditMode) {
+      if (CartDataManager.getInstance().cartInfoBean != null) {
+        for (CartProductInfoBean cartProductInfoBean
+            in CartDataManager.getInstance().cartInfoBean.productList) {
+          cartProductInfoBean.itemStatus = allCheck ? 1 : 0;
+        }
 
-      setState(() {});
+        setState(() {});
+      }
+    } else {
+      if (CartDataManager.getInstance().cartInfoBean != null) {
+        for (CartProductInfoBean cartProductInfoBean
+            in CartDataManager.getInstance().cartInfoBean.productList) {
+          cartProductInfoBean.isEditSelect = allCheck;
+        }
+
+        setState(() {});
+      }
     }
+  }
+
+  //删除选中的
+  void _deleteByCheck() {
+    List<int> productSkuIds = [];
+    for (CartProductInfoBean infoBean
+        in CartDataManager.getInstance().cartInfoBean.productList) {
+      if (infoBean.isEditSelect) {
+        productSkuIds.add(infoBean.productSkuId);
+      }
+    }
+
+    if (productSkuIds.isEmpty) {
+      ToastUtils.show("未选中商品");
+      return;
+    }
+
+    final HDialog hDialog = CommonDialogUtils.showCommonDialog(
+        "确定要删除这${productSkuIds.length}种商品吗？", "取消", null, "确定", () {
+      CartNetUtils.deleteFromCart(productSkuIds).then((value) {
+        ToastUtils.show(value.message);
+        load();
+      }).catchError((onError) {
+        ToastUtils.show(onError.message);
+      });
+    });
   }
 
   @override
   Future<List<CartProductInfoBean>> getData(int page, int pageSize) async {
-    CartDataManager.getInstance().cartInfoBean = await CartNetUtils.getCartInfo();
-    CartDataManager.getInstance().originCartInfoBean = CartInfoBean(cartInfoBean: CartDataManager.getInstance().cartInfoBean);
+    CartDataManager.getInstance().cartInfoBean =
+        await CartNetUtils.getCartInfo();
+    CartDataManager.getInstance().originCartInfoBean =
+        CartInfoBean(cartInfoBean: CartDataManager.getInstance().cartInfoBean);
     return CartDataManager.getInstance().cartInfoBean.productList;
   }
-
 
   @override
   void updateView() {
@@ -430,5 +556,4 @@ class HomePageChildCartState extends State<HomePageChildCart>
   Future<bool> updateCartInfo() async {
     return CartDataManager.getInstance().updateCartInfo();
   }
-
 }

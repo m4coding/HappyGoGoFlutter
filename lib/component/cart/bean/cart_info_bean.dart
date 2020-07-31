@@ -39,6 +39,10 @@ class CartProductInfoBean {
   int stock; //商品库存
   int quantity; //在购物车中的数量
 
+  ///非接口字段
+  @JsonKey(ignore: true)
+  bool isEditSelect = false; //是否在编辑模式下选中状态
+
   CartProductInfoBean();
 
   factory CartProductInfoBean.fromJson(Map<String, dynamic> json) => _$CartProductInfoBeanFromJson(json);

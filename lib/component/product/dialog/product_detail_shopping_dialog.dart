@@ -16,7 +16,7 @@ class ProductDetailShoppingDialog {
 
     GlobalKey<AddCartCountViewState> addCartViewKey = GlobalKey();
 
-    HDialog().build()
+    HDialog hDialog = HDialog().build()
       ..barrierDismissible = true
       ..canBackDismissible = true
       ..width = double.infinity
@@ -85,7 +85,9 @@ class ProductDetailShoppingDialog {
           ),
         ],
       ))
-      ..divider(color: Colors.transparent, height: 20.0)
+      ..divider(color: Colors.transparent, height: 20.0);
+
+    hDialog
       ..widget(Container(
         margin: EdgeInsets.symmetric(horizontal: 15),
         child: RaisedButton(
@@ -106,6 +108,7 @@ class ProductDetailShoppingDialog {
             int quantity = addCartViewKey.currentState.getQuantity();
             CartNetUtils.addCart(productDetailBean.productSkuId, quantity).then((value){
               ToastUtils.show(value.message);
+              hDialog.dismiss();
             }).catchError((onError){
               ToastUtils.show(onError.message);
             });
