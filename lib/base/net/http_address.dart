@@ -18,4 +18,12 @@ class HttpAddress {
   static final String urlGetCartCount = AppConfig.DOMAIN + "/api/cart/v1/getCartCount";
   static final String urlGetCartInfo = AppConfig.DOMAIN + "/api/cart/v1/getCartInfo";
   static final String urlUpdateCartInfo = AppConfig.DOMAIN + "/api/cart/v1/updateCartInfo";
+
+  static final String urlGetConfirmOrderInfo = AppConfig.DOMAIN + "/api/order/v1/getConfirmOrderInfo";
+
+  static final String urlGetMyAddressList = AppConfig.DOMAIN + "/api/address/v1/getMyAddressList";
+  static final String urlAddAddress = AppConfig.DOMAIN + "/api/address/v1/addAddress";
+  static final String urlDeleteAddress = AppConfig.DOMAIN + "/api/address/v1/deleteAddress";
+  static final String urlEditAddress = AppConfig.DOMAIN + "/api/address/v1/editAddress";
+  static final String urlGetAddressArea = AppConfig.DOMAIN + "/api/address/v1/getAreaList";
 }

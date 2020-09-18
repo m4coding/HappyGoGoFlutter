@@ -16,6 +16,8 @@ import 'package:happy_go_go_flutter/component/cart/bean/cart_page_params.dart';
 import 'package:happy_go_go_flutter/component/cart/data/cart_data_manager.dart';
 import 'package:happy_go_go_flutter/component/cart/net/cart_net_utils.dart';
 import 'package:happy_go_go_flutter/component/cart/widgets/add_cart_count_view.dart';
+import 'package:happy_go_go_flutter/component/order/bean/confirm_order_params.dart';
+import 'package:happy_go_go_flutter/component/order/order_page_manager.dart';
 import 'package:happy_go_go_flutter/component/product/bean/product_detail_param.dart';
 import 'package:happy_go_go_flutter/component/product/product_manager.dart';
 import 'package:happy_go_go_flutter/generated/l10n.dart';
@@ -364,6 +366,7 @@ class HomePageChildCartState extends State<HomePageChildCart>
     bool isAllSelect = false;
     double totalPrice = 0.0;
     int i = 0;
+    List<ConfirmOrderProductParams> productParamsList = [];
     if (CartDataManager.getInstance().cartInfoBean != null) {
       for (CartProductInfoBean cartProductInfoBean
           in CartDataManager.getInstance().cartInfoBean.productList) {
@@ -372,6 +375,11 @@ class HomePageChildCartState extends State<HomePageChildCart>
             i++;
             totalPrice += double.parse(cartProductInfoBean.productPrice) *
                 cartProductInfoBean.quantity;
+
+            ConfirmOrderProductParams confirmOrderProductParams = ConfirmOrderProductParams()
+              ..productSkuId = cartProductInfoBean.productSkuId
+              ..quantity = cartProductInfoBean.quantity;
+            productParamsList.add(confirmOrderProductParams);
           }
         } else {
           if (cartProductInfoBean.isEditSelect) {
@@ -458,6 +466,9 @@ class HomePageChildCartState extends State<HomePageChildCart>
                           ToastUtils.show("请先选择商品");
                           return;
                         }
+                        ConfirmOrderParams confirmOrderParams = ConfirmOrderParams();
+                        confirmOrderParams.productList = productParamsList;
+                        OrderPageManager.enterConfirmOrderPage(context, confirmOrderParams);
                       },
                     )
                   : GestureDetector(

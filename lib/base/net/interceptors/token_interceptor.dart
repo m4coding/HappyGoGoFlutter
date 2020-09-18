@@ -8,14 +8,11 @@ import '../../config/config.dart';
 
 /// Token拦截器
 class TokenInterceptors extends InterceptorsWrapper {
-  String _token;
 
   @override
   onRequest(RequestOptions options) async {
     //授权码
-    if (_token == null) {
-       _token = _getAuthorization();
-    }
+    String _token = _getAuthorization();
 
 
     if (_token != null && _token.isNotEmpty) {

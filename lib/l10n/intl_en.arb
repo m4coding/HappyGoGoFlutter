@@ -27,5 +27,10 @@
   "recommend": "Recommend",
   "all_check": "AllCheck",
   "count": "count",
-  "total_price": "Total Price:"
+  "total_price": "Total Price:",
+  "confirm_order": "Confirm Order",
+  "confirm": "confirm",
+  "shipping_address": "Shipping Address",
+  "add_shipping_address": "Add Address",
+  "save": "save"
 }

@@ -21,10 +21,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "add_shipping_address" : MessageLookupByLibrary.simpleMessage("Add Address"),
     "add_to_cart" : MessageLookupByLibrary.simpleMessage("AddCart"),
     "all_check" : MessageLookupByLibrary.simpleMessage("AllCheck"),
     "cart" : MessageLookupByLibrary.simpleMessage("Cart"),
     "category" : MessageLookupByLibrary.simpleMessage("Category"),
+    "confirm" : MessageLookupByLibrary.simpleMessage("confirm"),
+    "confirm_order" : MessageLookupByLibrary.simpleMessage("Confirm Order"),
     "contact" : MessageLookupByLibrary.simpleMessage("Contact"),
     "count" : MessageLookupByLibrary.simpleMessage("count"),
     "forget_password" : MessageLookupByLibrary.simpleMessage("Forget Password"),
@@ -48,6 +51,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "register" : MessageLookupByLibrary.simpleMessage("Register"),
     "register_user" : MessageLookupByLibrary.simpleMessage("RegisterUser"),
     "release_the_refresh" : MessageLookupByLibrary.simpleMessage("Release Refresh"),
+    "save" : MessageLookupByLibrary.simpleMessage("save"),
+    "shipping_address" : MessageLookupByLibrary.simpleMessage("Shipping Address"),
     "shopping_cart" : MessageLookupByLibrary.simpleMessage("Cart"),
     "total_price" : MessageLookupByLibrary.simpleMessage("Total Price:")
   };

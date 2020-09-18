@@ -27,5 +27,10 @@
   "recommend": "推荐",
   "all_check": "全选",
   "count": "结算",
-  "total_price": "合计："
+  "total_price": "合计：",
+  "confirm_order": "确认订单",
+  "confirm": "确认",
+  "shipping_address": "收货地址",
+  "add_shipping_address": "增加收货地址",
+  "save": "保存"
 }

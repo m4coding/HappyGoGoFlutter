@@ -322,6 +322,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Confirm Order`
+  String get confirm_order {
+    return Intl.message(
+      'Confirm Order',
+      name: 'confirm_order',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `confirm`
+  String get confirm {
+    return Intl.message(
+      'confirm',
+      name: 'confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shipping Address`
+  String get shipping_address {
+    return Intl.message(
+      'Shipping Address',
+      name: 'shipping_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Address`
+  String get add_shipping_address {
+    return Intl.message(
+      'Add Address',
+      name: 'add_shipping_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `save`
+  String get save {
+    return Intl.message(
+      'save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
