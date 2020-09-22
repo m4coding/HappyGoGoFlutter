@@ -17,7 +17,7 @@ UserReceiverAddressBean _$UserReceiverAddressBeanFromJson(
     ..postCode = json['postCode'] as String
     ..province = json['province'] as String
     ..region = json['region'] as String
-    ..userId = json['userId'] as String;
+    ..userId = json['userId'] as int;
 }
 
 Map<String, dynamic> _$UserReceiverAddressBeanToJson(

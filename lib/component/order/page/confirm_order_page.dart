@@ -6,6 +6,8 @@ import 'package:happy_go_go_flutter/base/widgets/bar/common_bar.dart';
 import 'package:happy_go_go_flutter/component/order/bean/confirm_order_info_bean.dart';
 import 'package:happy_go_go_flutter/component/order/bean/confirm_order_params.dart';
 import 'package:happy_go_go_flutter/component/order/net/order_net_utils.dart';
+import 'package:happy_go_go_flutter/component/person/bean/my_address_bean.dart';
+import 'package:happy_go_go_flutter/component/person/bean/user_receiver_address_bean.dart';
 import 'package:happy_go_go_flutter/component/person/net/person_net_utils.dart';
 import 'package:happy_go_go_flutter/component/person/person_page_manager.dart';
 import 'package:happy_go_go_flutter/generated/l10n.dart';
@@ -67,7 +69,19 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
     return SliverToBoxAdapter(
       child: GestureDetector(
         onTap: (){
-          PersonPageManager.enterMyAddressPage(context);
+          PersonPageManager.enterMyAddressPage(context).then((value){
+            if (_confirmOrderInfoBean?.userReceiverAddress == null) {
+              _confirmOrderInfoBean?.userReceiverAddress = UserReceiverAddressBean();
+            }
+            _confirmOrderInfoBean?.userReceiverAddress?.name = value.receiverName;
+            _confirmOrderInfoBean?.userReceiverAddress?.phoneNumber = value.receiverPhone;
+            _confirmOrderInfoBean?.userReceiverAddress?.detailAddress = value.receiverAddr;
+            _confirmOrderInfoBean?.userReceiverAddress?.defaultStatus = value.isDefault;
+
+            setState(() {
+
+            });
+          });
         },
         child: Container(
           margin: EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -105,6 +119,7 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
                               padding: EdgeInsets.only(top: 10),
                             ),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
                                   _confirmOrderInfoBean
@@ -115,7 +130,7 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
                                       fontSize: 14),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(top: 20),
+                                  padding: EdgeInsets.only(left: 10),
                                 ),
                                 Text(
                                   _confirmOrderInfoBean
@@ -316,7 +331,8 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
     OrderNetUtils.getConfirmOrderInfo(widget.confirmOrderParams).then((value) {
       _confirmOrderInfoBean = value;
       setState(() {});
-    }).catchError((onError) {
+    }).catchError((onError, stackTrace) {
+      print(stackTrace.toString());
       ToastUtils.show(onError.toString());
     });
   }

@@ -33,7 +33,7 @@ class CommonDialogUtils {
         fontWeight1: FontWeight.bold,
         onTap1: leftOnTap,
         text2: textRight,
-        color2: AppColors.accent,
+        color2: AppColors.primary,
         fontSize2: 14.0,
         fontWeight2: FontWeight.bold,
         onTap2: rightOnTap,

@@ -14,7 +14,7 @@ class UserReceiverAddressBean {
   String postCode; //邮政编码
   String province; //省份/直辖市
   String region; //区
-  String userId; //用户id
+  int userId; //用户id
 
   UserReceiverAddressBean();
 

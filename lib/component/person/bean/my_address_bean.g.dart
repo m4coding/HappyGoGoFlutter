@@ -21,6 +21,7 @@ Map<String, dynamic> _$MyAddressBeanToJson(MyAddressBean instance) =>
 
 AddressBean _$AddressBeanFromJson(Map<String, dynamic> json) {
   return AddressBean()
+    ..addressId = json['addressId'] as String
     ..isDefault = json['isDefault'] as int
     ..receiverAddr = json['receiverAddr'] as String
     ..receiverName = json['receiverName'] as String
@@ -30,6 +31,7 @@ AddressBean _$AddressBeanFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$AddressBeanToJson(AddressBean instance) =>
     <String, dynamic>{
+      'addressId': instance.addressId,
       'isDefault': instance.isDefault,
       'receiverAddr': instance.receiverAddr,
       'receiverName': instance.receiverName,

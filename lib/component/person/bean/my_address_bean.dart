@@ -16,6 +16,7 @@ class MyAddressBean {
 
 @JsonSerializable()
 class AddressBean {
+  String addressId; //地址id
   int isDefault; //是否默认地址，0-不是 1-是
   String receiverAddr; //收货详细地址
   String receiverName; //收货人名字

@@ -9,8 +9,8 @@ import 'package:happy_go_go_flutter/style/app_colors.dart';
 
 ///我的地址页
 class MyAddressPage extends StatefulWidget {
-  static newInstance(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(
+  static Future<AddressBean> newInstance(BuildContext context) {
+    return Navigator.push(context, MaterialPageRoute(
       builder: (_) {
         return MyAddressPage();
       },
@@ -22,7 +22,6 @@ class MyAddressPage extends StatefulWidget {
 }
 
 class _MyAddressPageState extends State<MyAddressPage> {
-
   MyAddressBean _myAddressBean;
 
   @override
@@ -39,57 +38,129 @@ class _MyAddressPageState extends State<MyAddressPage> {
         title: S.of(context).shipping_address,
       ),
       body: Container(
+          color: AppColors.fff5f5f5,
           child: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(itemBuilder: (context, index) {
-
-              AddressBean addressBean = _myAddressBean.addressList[index];
-
-              return Container(
-                child: Column(
-                  children: <Widget>[
-                    Row(children: <Widget>[
-                      Text(addressBean?.receiverName ?? "", style: TextStyle(fontSize: 16, color: AppColors.primary_text, fontWeight: FontWeight.bold),),
-                      Padding(padding: EdgeInsets.only(left: 5),),
-                      Text(addressBean?.receiverPhone ?? "", style: TextStyle(fontSize: 16, color: AppColors.primary_text, fontWeight: FontWeight.bold)),
-                      Padding(padding: EdgeInsets.only(left: 5),),
-                      Container(child: Text("", style: TextStyle(fontSize: 16, color: AppColors.white))),
-                    ]),
-                    Row(
-                      children: <Widget>[
-                        Text(addressBean?.receiverAddr ?? "", style: TextStyle(fontSize: 16, color: AppColors.secondary_text)),
-                        Expanded(child: Icon(Icons.edit, size: 15,),)
-                      ],
-                    )
-                  ],
-                ),
-              );
-            }, itemCount: _myAddressBean?.addressList?.length ?? 0,),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 25, right: 25, bottom: 20, top: 20),
-            child: RaisedButton(
-              elevation: 0,
-              child: Container(
-                height: 48,
-                child: Center(
-                    child: Text(
-                  S.of(context).add_shipping_address,
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                  textAlign: TextAlign.center,
-                )),
+            children: <Widget>[
+              Container(
+                height: 10,
               ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100)),
-              color: Colors.red,
-              onPressed: () {
-                PersonPageManager.enterAddAddressPage(context);
-              },
-            ),
-          )
-        ],
-      )),
+              Expanded(
+                child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    AddressBean addressBean = _myAddressBean.addressList[index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, addressBean);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, top: 10, bottom: 10),
+                        color: AppColors.white,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(children: <Widget>[
+                                    Text(
+                                      addressBean?.receiverName ?? "",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: AppColors.primary_text,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5),
+                                    ),
+                                    Text(addressBean?.receiverPhone ?? "",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: AppColors.primary_text,
+                                            fontWeight: FontWeight.bold)),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5),
+                                    ),
+                                    Container(
+                                        margin: EdgeInsets.only(left: 10),
+                                        child: Text(
+                                            addressBean.isDefault == 1 ? "默认" : "",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: AppColors.primary))),
+                                  ]),
+                                  Text(addressBean.receiverRegion,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: AppColors.secondary_text)),
+                                  Text(addressBean?.receiverAddr ?? "",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: AppColors.secondary_text)),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              child: Container(
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 25,
+                                  color: AppColors.secondary_text,
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                              ),
+                              onTap: () {
+                                PersonPageManager.enterAddAddressPage(context, addressBean: addressBean)
+                                    .then((value) {
+                                  if (value) {
+                                    _getNetData();
+                                  }
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: _myAddressBean?.addressList?.length ?? 0,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 10,
+                    );
+                  },
+                ),
+              ),
+              Container(
+                margin:
+                    EdgeInsets.only(left: 25, right: 25, bottom: 20, top: 20),
+                child: RaisedButton(
+                  elevation: 0,
+                  child: Container(
+                    height: 48,
+                    child: Center(
+                        child: Text(
+                      S.of(context).add_shipping_address,
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    )),
+                  ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100)),
+                  color: Colors.red,
+                  onPressed: () {
+                    PersonPageManager.enterAddAddressPage(context)
+                        .then((value) {
+                      if (value) {
+                        _getNetData();
+                      }
+                    });
+                  },
+                ),
+              )
+            ],
+          )),
     );
   }
 
